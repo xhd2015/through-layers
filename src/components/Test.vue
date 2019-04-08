@@ -1,0 +1,49 @@
+<template>
+    <div>
+
+    </div>
+</template>
+
+
+<script>
+    import Context from "./Context"
+    import * as Mapper from "./Mapper"
+    import Notifier from "./Notifier"
+    import {StringMapper} from "./Mapper";
+
+    let context = new Context()
+
+    context.setValue("app.name", "Fulton The Name")
+    context.setValue("app.env.first", "proud")
+    context.setValue("app.version", "1.0")
+
+    context.setMapper("menu.name", new Mapper.TemplateMapper(context, "open ${app.name}-${app.version}@${app.env.first}"))
+
+
+    let grpMapper = new Mapper.PriorityMapperQueue()
+    grpMapper.addMapper({
+        name: "app.name.app.env.first",
+        priority: 2,
+        mapper: new Mapper.TemplateMapper(context, "Title:#${app.name} of ${app.env.first}")
+    })
+    context.setMapper("window.title",grpMapper)
+
+
+
+    console.log("window.title is ", context.resolve("window.title"))
+
+    grpMapper.addMapper({
+        name:"plain",
+        priority: -1,
+        mapper:new StringMapper("#Plain I Set Title")
+    })
+    console.log("now window.title is ", context.resolve("window.title"))
+
+
+    export default {}
+
+</script>
+
+<style scoped>
+
+</style>
