@@ -1,6 +1,7 @@
 <template>
     <div>
-
+        <label>Window Title:</label>
+        <input v-model="context"/>{{context.resolve("window.title")}}
     </div>
 </template>
 
@@ -26,21 +27,26 @@
         priority: 2,
         mapper: new Mapper.TemplateMapper(context, "Title:#${app.name} of ${app.env.first}")
     })
-    context.setMapper("window.title",grpMapper)
-
+    context.setMapper("window.title", grpMapper)
 
 
     console.log("window.title is ", context.resolve("window.title"))
 
     grpMapper.addMapper({
-        name:"plain",
+        name: "plain",
         priority: -1,
-        mapper:new StringMapper("#Plain I Set Title")
+        mapper: new StringMapper("#Plain I Set Title")
     })
     console.log("now window.title is ", context.resolve("window.title"))
 
 
-    export default {}
+    export default {
+        data() {
+            return {
+                context
+            }
+        }
+    }
 
 </script>
 
