@@ -63,6 +63,11 @@ Full code can be found here [test/html-cache-input/test-template-config-html.js]
 
 # Explore Other Fun
 - [Explore Vue.js](VUE_INTERNAL.md)
+- `this` binding
+1.if it is defined as a function, without enclosing object, `this` is bind to `window`
+2.if it is called via `f.call(null,...)` or `f.bind(null)(...)`, then `this` is bind to `window`
+3.if it is bind with an enclosing object, `this` is bind to that object,note: it is the nearst object that contains the function
+4.if the function is called with either `bind(obj)(...)` or `call(obj...)`, and `obj` is not `null` nor `undefined`, then `this` is bind to `obj`
 
 # LICENSE
 Because this project has imported production or source of other projects, to avoid any future argument about this, it is LICENSED under MIT LICENSE, GPL-v2, BSD LICENSE, Apache * LICENSE, etc.

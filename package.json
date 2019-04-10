@@ -5,8 +5,10 @@
     "start": "electron dist/main.js",
     "build-main": "npx webpack --config build-config/main/webpack.config.js",
     "build-renderer": "npx webpack --config build-config/renderer/webpack.config.js",
-    "build-test-html-cache-input":"npx webpack --config test/html-cache-input/webpack.config.test-html.js",
-    "open-test-html-cache-input":"chrome test/html-cache-input/webpack.config.test-html.html"
+    "build-test-html-cache-input": "npx webpack --config test/html-cache-input/webpack.config.test-html.js",
+    "open-test-html-cache-input": "chrome test/html-cache-input/webpack.config.test-html.html",
+    "build-html-main-reactive": "npx webpack --config test/html-main-reactive/webpack.config.js",
+    "open-html-main-reactive": "chrome test/html-main-reactive/index.html"
   },
   "dependencies": {
     "typescript-collections": "^1.3.2"

@@ -15,6 +15,12 @@ function isArray(obj){
 function isString(obj){
     return obj!==null && obj.constructor === String
 }
+function isFunction(obj){
+    return obj!==null && obj.constructor === Function
+}
+function isType(obj,type){
+    return obj!==null && obj.constructor === type
+}
 
 function setForceDeepProperty(obj,pathArray,value){
     let currentTarget = obj
@@ -37,5 +43,6 @@ export {
     isArray,
     isPlainObject,
     isString,
-    setForceDeepProperty
+    setForceDeepProperty,
+    isFunction
 }

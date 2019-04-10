@@ -81,7 +81,7 @@
 /******/
 /******/
 /******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(__webpack_require__.s = "./test/html-cache-input/test-template-config-html.js");
+/******/ 	return __webpack_require__(__webpack_require__.s = "./test/html-main-reactive/index.js");
 /******/ })
 /************************************************************************/
 /******/ ({
@@ -98,6 +98,18 @@ eval("__webpack_require__.r(__webpack_exports__);\n//\n//\n//\n//\n//\n/* harmon
 
 /***/ }),
 
+/***/ "./node_modules/babel-loader/lib/index.js?!./node_modules/vue-loader/lib/index.js?!./test/html-main-reactive/App.vue?vue&type=script&lang=js&":
+/*!************************************************************************************************************************************************************!*\
+  !*** ./node_modules/babel-loader/lib??ref--1!./node_modules/vue-loader/lib??vue-loader-options!./test/html-main-reactive/App.vue?vue&type=script&lang=js& ***!
+  \************************************************************************************************************************************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+eval("__webpack_require__.r(__webpack_exports__);\n//\n//\n//\n//\n//\n//\n//\n//\n//\n//\n//\n//\n//\n//\n//\n//\n//\n//\n//\n//\n//\n//\n//\n//\n//\n//\n//\n//\n//\n//\n//\n//\nvar _require = __webpack_require__(/*! ../../src/lib/template-config */ \"./src/lib/template-config.js\"),\n    parseDataComputed = _require.parseDataComputed;\n\nvar _require2 = __webpack_require__(/*! ../../src/lib/data-utils */ \"./src/lib/data-utils.js\"),\n    getLast = _require2.getLast,\n    capitalize = _require2.capitalize,\n    decapitalize = _require2.decapitalize;\n\nvar CacheInput = __webpack_require__(/*! ../../src/components/CacheInput */ \"./src/components/CacheInput.vue\")[\"default\"]; // the config, a plain object\n\n\nvar config = {\n  _meta: {\n    // the cache root is \"cache\"\n    cacheRoot: \"cache\",\n    dataAsFunction: true\n  },\n  method: {\n    \"return\": {\n      type: \"${cache.method.return.type}\"\n    },\n    name: \"${cache.method.name}\",\n    parameter: {\n      type: \"${cache.method.parameter.type}\"\n    },\n    caculated: {\n      \"param.var.decl\": function paramVarDecl() {\n        var paramType = this.get('method.parameter.type');\n\n        if (paramType) {\n          var name = decapitalize(getLast(paramType.split(\".\")));\n\n          if (name) {\n            return paramType + \" \" + name;\n          }\n        }\n\n        return \"\";\n      }\n    }\n  }\n};\nvar computedConfig = parseDataComputed(config); // add components\n\ncomputedConfig.components = {\n  CacheInput: CacheInput\n};\n/* harmony default export */ __webpack_exports__[\"default\"] = (computedConfig);\n\n//# sourceURL=webpack:///./test/html-main-reactive/App.vue?./node_modules/babel-loader/lib??ref--1!./node_modules/vue-loader/lib??vue-loader-options");
+
+/***/ }),
+
 /***/ "./node_modules/vue-loader/lib/loaders/templateLoader.js?!./node_modules/vue-loader/lib/index.js?!./src/components/CacheInput.vue?vue&type=template&id=225b3f98&scoped=true&":
 /*!****************************************************************************************************************************************************************************************************************!*\
   !*** ./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/vue-loader/lib??vue-loader-options!./src/components/CacheInput.vue?vue&type=template&id=225b3f98&scoped=true& ***!
@@ -107,6 +119,18 @@ eval("__webpack_require__.r(__webpack_exports__);\n//\n//\n//\n//\n//\n/* harmon
 
 "use strict";
 eval("__webpack_require__.r(__webpack_exports__);\n/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, \"render\", function() { return render; });\n/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, \"staticRenderFns\", function() { return staticRenderFns; });\nvar render = function() {\n  var _vm = this\n  var _h = _vm.$createElement\n  var _c = _vm._self._c || _h\n  return _c(\"input\", {\n    domProps: { value: _vm.$parent[_vm.keyPath] },\n    on: {\n      input: function($event) {\n        return _vm.$emit(\"input\", $event.target.value)\n      }\n    }\n  })\n}\nvar staticRenderFns = []\nrender._withStripped = true\n\n\n\n//# sourceURL=webpack:///./src/components/CacheInput.vue?./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/vue-loader/lib??vue-loader-options");
+
+/***/ }),
+
+/***/ "./node_modules/vue-loader/lib/loaders/templateLoader.js?!./node_modules/vue-loader/lib/index.js?!./test/html-main-reactive/App.vue?vue&type=template&id=05225e48&":
+/*!******************************************************************************************************************************************************************************************************!*\
+  !*** ./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/vue-loader/lib??vue-loader-options!./test/html-main-reactive/App.vue?vue&type=template&id=05225e48& ***!
+  \******************************************************************************************************************************************************************************************************/
+/*! exports provided: render, staticRenderFns */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+eval("__webpack_require__.r(__webpack_exports__);\n/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, \"render\", function() { return render; });\n/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, \"staticRenderFns\", function() { return staticRenderFns; });\nvar render = function() {\n  var _vm = this\n  var _h = _vm.$createElement\n  var _c = _vm._self._c || _h\n  return _c(\n    \"div\",\n    [\n      _c(\"label\", [_vm._v(\"Return Type:\")]),\n      _vm._v(\" \"),\n      _c(\"cache-input\", { attrs: { \"key-path\": \"method.return.type\" } }),\n      _vm._v(\" \"),\n      _c(\"br\"),\n      _vm._v(\" \"),\n      _c(\"label\", [_vm._v(\"Method Name:\")]),\n      _vm._v(\" \"),\n      _c(\"cache-input\", { attrs: { \"key-path\": \"method.name\" } }),\n      _vm._v(\" \"),\n      _c(\"br\"),\n      _vm._v(\" \"),\n      _c(\"label\", [_vm._v(\"Parameter Type:\")]),\n      _vm._v(\" \"),\n      _c(\"cache-input\", { attrs: { \"key-path\": \"method.parameter.type\" } }),\n      _vm._v(\" \"),\n      _c(\n        \"button\",\n        {\n          on: {\n            click: function($event) {\n              return _vm.$refs[\"method.parameter.type\"].unset()\n            }\n          }\n        },\n        [_vm._v(\"Unset\")]\n      ),\n      _c(\"br\"),\n      _vm._v(\" \"),\n      _c(\"hr\"),\n      _vm._v(\" \"),\n      _c(\"div\", [\n        _vm._m(0),\n        _c(\"br\"),\n        _vm._v(\" \"),\n        _c(\"span\", [\n          _vm._v(\n            \"public \" +\n              _vm._s(this[\"method.return.type\"]) +\n              \" \" +\n              _vm._s(this[\"method.name\"]) +\n              \"(\" +\n              _vm._s(this[\"method.caculated.param.var.decl\"]) +\n              \"){\\n              return null;\\n          }\\n          \"\n          )\n        ])\n      ]),\n      _vm._v(\" \"),\n      _c(\"div\", [\n        _vm._m(1),\n        _vm._v(\" \"),\n        _c(\"br\"),\n        _vm._v(\" \"),\n        _c(\"span\", [\n          _vm._v(\n            '\\n              <select id=\"' +\n              _vm._s(this[\"method.name\"]) +\n              '\">\\n                  SELECT * FROM t_mapper\\n              /<select>\\n          '\n          )\n        ])\n      ])\n    ],\n    1\n  )\n}\nvar staticRenderFns = [\n  function() {\n    var _vm = this\n    var _h = _vm.$createElement\n    var _c = _vm._self._c || _h\n    return _c(\"label\", [_c(\"h3\", [_vm._v(\"Controller Method\")])])\n  },\n  function() {\n    var _vm = this\n    var _h = _vm.$createElement\n    var _c = _vm._self._c || _h\n    return _c(\"label\", [_c(\"h3\", [_vm._v(\"Sql Implementation\")])])\n  }\n]\nrender._withStripped = true\n\n\n\n//# sourceURL=webpack:///./test/html-main-reactive/App.vue?./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/vue-loader/lib??vue-loader-options");
 
 /***/ }),
 
@@ -158,6 +182,18 @@ eval("__webpack_require__.r(__webpack_exports__);\n/* harmony import */ var _nod
 
 /***/ }),
 
+/***/ "./src/lib/data-utils.js":
+/*!*******************************!*\
+  !*** ./src/lib/data-utils.js ***!
+  \*******************************/
+/*! exports provided: getLast, capitalize, decapitalize */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+eval("__webpack_require__.r(__webpack_exports__);\n/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, \"getLast\", function() { return getLast; });\n/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, \"capitalize\", function() { return capitalize; });\n/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, \"decapitalize\", function() { return decapitalize; });\nfunction getLast(arr) {\n  return arr ? arr[arr.length - 1] : null;\n}\n\nfunction capitalize(str) {\n  if (str === \"\") {\n    return \"\";\n  }\n\n  return str != null ? str[0].toUpperCase() + str.slice(1) : null;\n}\n\nfunction decapitalize(str) {\n  if (str === \"\") {\n    return \"\";\n  }\n\n  return str != null ? str[0].toLowerCase() + str.slice(1) : null;\n}\n\n\n\n//# sourceURL=webpack:///./src/lib/data-utils.js?");
+
+/***/ }),
+
 /***/ "./src/lib/template-config.js":
 /*!************************************!*\
   !*** ./src/lib/template-config.js ***!
@@ -206,14 +242,50 @@ eval("__webpack_require__.r(__webpack_exports__);\n/* harmony export (binding) *
 
 /***/ }),
 
-/***/ "./test/html-cache-input/test-template-config-html.js":
-/*!************************************************************!*\
-  !*** ./test/html-cache-input/test-template-config-html.js ***!
-  \************************************************************/
+/***/ "./test/html-main-reactive/App.vue":
+/*!*****************************************!*\
+  !*** ./test/html-main-reactive/App.vue ***!
+  \*****************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+eval("__webpack_require__.r(__webpack_exports__);\n/* harmony import */ var _App_vue_vue_type_template_id_05225e48___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./App.vue?vue&type=template&id=05225e48& */ \"./test/html-main-reactive/App.vue?vue&type=template&id=05225e48&\");\n/* harmony import */ var _App_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./App.vue?vue&type=script&lang=js& */ \"./test/html-main-reactive/App.vue?vue&type=script&lang=js&\");\n/* empty/unused harmony star reexport *//* harmony import */ var _node_modules_vue_loader_lib_runtime_componentNormalizer_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../../node_modules/vue-loader/lib/runtime/componentNormalizer.js */ \"./node_modules/vue-loader/lib/runtime/componentNormalizer.js\");\n\n\n\n\n\n/* normalize component */\n\nvar component = Object(_node_modules_vue_loader_lib_runtime_componentNormalizer_js__WEBPACK_IMPORTED_MODULE_2__[\"default\"])(\n  _App_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__[\"default\"],\n  _App_vue_vue_type_template_id_05225e48___WEBPACK_IMPORTED_MODULE_0__[\"render\"],\n  _App_vue_vue_type_template_id_05225e48___WEBPACK_IMPORTED_MODULE_0__[\"staticRenderFns\"],\n  false,\n  null,\n  null,\n  null\n  \n)\n\n/* hot reload */\nif (false) { var api; }\ncomponent.options.__file = \"test/html-main-reactive/App.vue\"\n/* harmony default export */ __webpack_exports__[\"default\"] = (component.exports);\n\n//# sourceURL=webpack:///./test/html-main-reactive/App.vue?");
+
+/***/ }),
+
+/***/ "./test/html-main-reactive/App.vue?vue&type=script&lang=js&":
+/*!******************************************************************!*\
+  !*** ./test/html-main-reactive/App.vue?vue&type=script&lang=js& ***!
+  \******************************************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+eval("__webpack_require__.r(__webpack_exports__);\n/* harmony import */ var _node_modules_babel_loader_lib_index_js_ref_1_node_modules_vue_loader_lib_index_js_vue_loader_options_App_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../node_modules/babel-loader/lib??ref--1!../../node_modules/vue-loader/lib??vue-loader-options!./App.vue?vue&type=script&lang=js& */ \"./node_modules/babel-loader/lib/index.js?!./node_modules/vue-loader/lib/index.js?!./test/html-main-reactive/App.vue?vue&type=script&lang=js&\");\n/* empty/unused harmony star reexport */ /* harmony default export */ __webpack_exports__[\"default\"] = (_node_modules_babel_loader_lib_index_js_ref_1_node_modules_vue_loader_lib_index_js_vue_loader_options_App_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_0__[\"default\"]); \n\n//# sourceURL=webpack:///./test/html-main-reactive/App.vue?");
+
+/***/ }),
+
+/***/ "./test/html-main-reactive/App.vue?vue&type=template&id=05225e48&":
+/*!************************************************************************!*\
+  !*** ./test/html-main-reactive/App.vue?vue&type=template&id=05225e48& ***!
+  \************************************************************************/
+/*! exports provided: render, staticRenderFns */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+eval("__webpack_require__.r(__webpack_exports__);\n/* harmony import */ var _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_App_vue_vue_type_template_id_05225e48___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!../../node_modules/vue-loader/lib??vue-loader-options!./App.vue?vue&type=template&id=05225e48& */ \"./node_modules/vue-loader/lib/loaders/templateLoader.js?!./node_modules/vue-loader/lib/index.js?!./test/html-main-reactive/App.vue?vue&type=template&id=05225e48&\");\n/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, \"render\", function() { return _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_App_vue_vue_type_template_id_05225e48___WEBPACK_IMPORTED_MODULE_0__[\"render\"]; });\n\n/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, \"staticRenderFns\", function() { return _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_App_vue_vue_type_template_id_05225e48___WEBPACK_IMPORTED_MODULE_0__[\"staticRenderFns\"]; });\n\n\n\n//# sourceURL=webpack:///./test/html-main-reactive/App.vue?");
+
+/***/ }),
+
+/***/ "./test/html-main-reactive/index.js":
+/*!******************************************!*\
+  !*** ./test/html-main-reactive/index.js ***!
+  \******************************************/
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
-eval("var _require = __webpack_require__(/*! ../../src/lib/template-config */ \"./src/lib/template-config.js\"),\n    parseDataComputed = _require.parseDataComputed;\n\nvar CacheInput = __webpack_require__(/*! ../../src/components/CacheInput */ \"./src/components/CacheInput.vue\")[\"default\"]; // the config, a plain object\n\n\nvar config = {\n  _meta: {\n    // the cache root is \"cache\"\n    cacheRoot: \"cache\"\n  },\n  // the property can be a path string\n  \"app.name\": \"${cache.app.name}\",\n  // and can also be a plain object, note that this object will eventually becomes: \"app.version\"\n  app: {\n    version: \"${cache.app.version}\"\n  },\n  window: {\n    // try in order\n    title: [\"${cache.window.title}\", \"${app.name} - ${app.version}\", \"not set\"]\n  }\n};\nvar computedConfig = parseDataComputed(config); // add components\n\ncomputedConfig.components = {\n  CacheInput: CacheInput // create vue, and mount\n\n};\nvar vm = new Vue(computedConfig);\nvm.$mount(\"#app\");\n\n//# sourceURL=webpack:///./test/html-cache-input/test-template-config-html.js?");
+eval("var App = __webpack_require__(/*! ./App */ \"./test/html-main-reactive/App.vue\")[\"default\"];\n\nconsole.debug('App = ', App);\nvar v = new Vue({\n  components: {\n    App: App\n  },\n  template: \"<app></app>\"\n});\nv.$mount(\"#app\");\nconsole.debug(\"new vue instance = \", v);\n\n//# sourceURL=webpack:///./test/html-main-reactive/index.js?");
 
 /***/ })
 

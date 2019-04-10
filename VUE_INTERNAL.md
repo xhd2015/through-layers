@@ -31,6 +31,8 @@ A Watcher keep a list of Deps that it depends on, whenever it is re-evaluated be
 
 A Watcher can also be a dependency for other watchers,and this relies on a very obvious and simple rule: the value of the Watcher changes only if either of its dependency is changed.So when it is used as a dependency to other watchers, instead of being a Dep, it exposes its list of dependency to these watchers.
 
+And to be simple, all setter call by either a computed property or a watcher, will finally fall into calling setter of an object that has or has not a Dep stub, no matter they call the setter directly, or call setter of other watchers.So a property of any type in a Vue instance will change only if any property with a Dep changes, and it is not limited that Dep object belongs to the same Vue instance.
+
 Core Watcher Properties and Methods:
 
 1.deps[]  -- dependency list

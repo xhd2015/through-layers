@@ -4,10 +4,6 @@
 
 
 <script>
-const {
-    setDeepExistingReactiveProperty,
-    getDeepExistingProperty
-} = require("../lib/vue-utils")
 
 export default {
   // note:do not use 'key', they are reserved,
@@ -30,25 +26,14 @@ export default {
       this.set(null);
     },
     set(val) {
-      setDeepExistingReactiveProperty(
-        this.$parent,
-        this.cacheKeyPathArray,
-        val
-      );
+      this.$parent.set(this.keyPath,val)
     }
   },
   created(){
-      console.debug("CacheInput created")
-     console.debug("this.setRef = " , this.setRef)
       // default will set ref on it 
-      if(this.setRef==null){
-          this.setRef = true
-      }
-     if(this.setRef){
-         console.debug("this.setRef = " , this.setRef)
+     if(this.setRef == null || this.setRef ){
          this.$parent.$refs[this.keyPath] = this
      }
-      console.debug("parent ref keys:",Object.keys(this.$parent.$refs));
   },
   mounted() {
     let _this = this;
