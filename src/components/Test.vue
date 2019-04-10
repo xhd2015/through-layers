@@ -39,6 +39,18 @@
     })
     console.log("now window.title is ", context.resolve("window.title"))
 
+    const PRIORITY_HIGHEST = -1;
+    const PRIORITY_LOWEST = 0xFFFFFFFF
+    // accept two forms:  string or array of string
+    // root is cache, and can be configured
+    // settable is complted via cache.*
+    // all these keys will be made to deep path keys, assuming they are splitted by dot(.)
+    let config = {
+        "app.name":"${cache.app.name}",
+        "window.title":"${app.name}-${app.version}",
+        "form.title":["${cache.form.title}", "Form ${app.name}-${app.version}"]
+    }
+
 
     export default {
         data() {

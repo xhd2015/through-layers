@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>Vue Test</title>
+    <script src="https://cdn.jsdelivr.net/npm/vue"></script>
+</head>
+
+<body>
+    <div id="app">
+        <lable>App Name:</lable>
+        <cache-input key-path="app.name"></cache-input> <br />
+        <lable>App Version:</lable>
+        <cache-input key-path="app.version"></cache-input> <br />
+        <lable>Window Title:</lable>
+        <cache-input key-path="window.title"></cache-input>  <button @click="console.log(Object.keys($refs));$refs['window.title'].unset()">Clear</button><br />
+
+        <hr/>
+        <label>Summary Information:</label> <br/>
+        <lable>App Name:</lable>
+        <span>{{this['app.name']}}</span>  <br/>
+        <lable>App Version:</lable>
+        <span>{{this['app.version']}}</span>  <br/>
+        <lable>Window Title:</lable>
+        <span>{{this['window.title']}}</span>
+    </div>
+</body>
+
+<script src="dist/test-template-config-html.js"></script>
+
+</html>

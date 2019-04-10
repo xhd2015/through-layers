@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="UTF-8">
+    <title>Vue Test</title>
+    <script src="https://cdn.jsdelivr.net/npm/vue"></script>
+    <script src="../src/lib/vue-utils.js"></script>
+</head>
+
+<body>
+    <div id="app">
+        <lable>App Name:</lable>
+        <!-- <input v-bind:value="this['app.name']" v-on:input="cache.app.name=$event.target.value"></input> <br /> -->
+        <cache-input key-path="app.name" ref="appName"></cache-input> <button @click="$refs.appName.unset()">Clear Input</button>
+        <p>Input App Name is :{{this["app.name"]}}</p>
+    </div>
+</body>
+
+<script>
+
+let CacheInput = {
+    // note:do not use 'key', they are reserved
+    props:['keyPath',"cacheKey"],
+    data(){
+        return {cacheKeyPath: (this.cacheKey || this.$parent.cacheKey || "cache")  + "." + this.keyPath}
+    },
+    computed:{
+        cacheKeyPathArray(){ return this.cacheKeyPath.split(".")}
+    },
+    methods:{
+       unset(){
+        this.set(null)
+       },
+       set(val){
+        setDeepExistingReactiveProperty(this.$parent, this.cacheKeyPathArray, val)
+       }
+    },
+    template:`<input v-bind:value="$parent[keyPath]" v-on:input="$emit('input',$event.target.value)"/>`,
+    mounted(){
+        let _this = this
+        this.$on("input", function(val){
+            _this.set(val)
+        })
+    }
+}
+
+let vm = new Vue({
+    el:"#app",
+    components:{CacheInput:CacheInput},
+   data:{
+       cache:{ app: { name:null, version:null}},
+       key:"abc"  
+   },
+   computed:{
+        "app.name":{
+              get(){ return this.cache.app.name!==null? this.cache.app.name : "Versioned:"+this.cache.app.version}
+        }
+   }
+})
+</script>
+</html>
