@@ -13,7 +13,7 @@
         <lable>App Version:</lable>
         <cache-input key-path="app.version"></cache-input> <br />
         <lable>Window Title:</lable>
-        <cache-input key-path="window.title"></cache-input>  <button @click="console.log(Object.keys($refs));$refs['window.title'].unset()">Clear</button><br />
+        <cache-input key-path="window.title"></cache-input>  <button @click="$refs['window.title'].unset()">Clear</button><br />
 
         <hr/>
         <label>Summary Information:</label> <br/>

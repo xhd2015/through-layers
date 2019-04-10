@@ -10,8 +10,11 @@ const {
     getDeepExistingProperty
 } = require("./vue-utils")
 
+<<<<<<< Updated upstream
 console.debug("require vue-utils = ", require("./vue-utils"))
 
+=======
+>>>>>>> Stashed changes
 // const Vue = require('vue')
 
 /**
