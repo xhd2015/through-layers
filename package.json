@@ -8,10 +8,13 @@
     "build-test-html-cache-input": "npx webpack --config test/html-cache-input/webpack.config.test-html.js",
     "open-test-html-cache-input": "chrome test/html-cache-input/webpack.config.test-html.html",
     "build-html-main-reactive": "npx webpack --config test/html-main-reactive/webpack.config.js",
-    "open-html-main-reactive": "chrome test/html-main-reactive/index.html"
+    "open-html-main-reactive": "chrome test/html-main-reactive/index.html",
+    "build-electron-main-reactive-editor": "npx webpack --config test/electron-main-reactive-editor/loader/webpack.config.main.js && npx webpack --config test/electron-main-reactive-editor/webpack.config.js"
   },
   "dependencies": {
-    "typescript-collections": "^1.3.2"
+    "typescript-collections": "^1.3.2",
+    "chevrotain": "^4.3.2",
+    "java-parser": "^0.2.0",
   },
   "devDependencies": {
     "@babel/core": "^7.4.3",
