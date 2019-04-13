@@ -1,3 +1,22 @@
+function setDeepForceReactiveProperty(vm,pathArray,value){
+    let currentTarget = vm
+    for(let i=0;i<pathArray.length;++i){
+        let key = pathArray[i]
+        if(i===pathArray.length - 1){
+            vm.$set(currentTarget,key, value)
+            return
+        }
+        // check existence
+        if(!(key in currentTarget)){
+            let tmp = {}
+            vm.$set(currentTarget,key,tmp)
+            currentTarget = tmp
+        }else{
+            currentTarget = currentTarget[key]
+        }
+    }
+}
+
 /**
  * set an existing property, the property must exist
  * @param {} vm 
@@ -39,5 +58,6 @@ function getDeepExistingProperty(vm,pathArray){
 
 export {
     setDeepExistingReactiveProperty,
-    getDeepExistingProperty
+    getDeepExistingProperty,
+    setDeepForceReactiveProperty
 }

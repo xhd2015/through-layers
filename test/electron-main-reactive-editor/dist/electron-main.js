@@ -81,20 +81,20 @@
 /******/
 /******/
 /******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(__webpack_require__.s = "./test/electron-main-reactive-editor/loader/index.js");
+/******/ 	return __webpack_require__(__webpack_require__.s = "./loader/index.js");
 /******/ })
 /************************************************************************/
 /******/ ({
 
-/***/ "./test/electron-main-reactive-editor/loader/index.js":
-/*!************************************************************!*\
-  !*** ./test/electron-main-reactive-editor/loader/index.js ***!
-  \************************************************************/
+/***/ "./loader/index.js":
+/*!*************************!*\
+  !*** ./loader/index.js ***!
+  \*************************/
 /*! no exports provided */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
-eval("__webpack_require__.r(__webpack_exports__);\n/* WEBPACK VAR INJECTION */(function(__dirname) {/* harmony import */ var electron__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! electron */ \"electron\");\n/* harmony import */ var electron__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(electron__WEBPACK_IMPORTED_MODULE_0__);\n// const {app} = require('electron')\nvar path = __webpack_require__(/*! path */ \"path\");\n\n\nvar win = null; // dir name is /, resolved to \"D:/\"\n\nconsole.log(\"dirname is\", path.resolve(__dirname));\n\nfunction createWindow() {\n  win = new electron__WEBPACK_IMPORTED_MODULE_0__[\"BrowserWindow\"]({\n    width: 600,\n    height: 800 // webPreferences: {\n    //     webSecurity: false\n    //   }\n\n  });\n  win.webContents.openDevTools(); // win.loadURL(\"file:///D:\\\\repos\\\\through-layer\\\\test\\\\electron-main-reactive-editor\\\\index.html\"); // not work\n  // win.loadURL(\"file:///D:\\\\repos\\\\through-layers\\\\dist\\\\index.html\") // worked\n  // win.loadURL(\"file:///D:\\\\repos\\\\through-layer\\\\test\\\\electron-main-reactive-editor\\\\dist\\\\index.html\"); // not work\n\n  win.loadURL(\"file:///index.html\"); // not work\n\n  win.on(\"close\", function () {\n    win = null;\n  });\n}\n\nelectron__WEBPACK_IMPORTED_MODULE_0__[\"app\"].on(\"ready\", createWindow);\nelectron__WEBPACK_IMPORTED_MODULE_0__[\"app\"].on(\"window-all-closed\", function () {\n  if (process.platform !== \"darwin\") {\n    electron__WEBPACK_IMPORTED_MODULE_0__[\"app\"].quit();\n  }\n});\nelectron__WEBPACK_IMPORTED_MODULE_0__[\"app\"].on(\"activate\", function () {\n  if (win == null) {\n    createWindow();\n  }\n});\n/* WEBPACK VAR INJECTION */}.call(this, \"/\"))\n\n//# sourceURL=webpack:///./test/electron-main-reactive-editor/loader/index.js?");
+eval("__webpack_require__.r(__webpack_exports__);\n/* WEBPACK VAR INJECTION */(function(__dirname) {/* harmony import */ var electron__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! electron */ \"electron\");\n/* harmony import */ var electron__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(electron__WEBPACK_IMPORTED_MODULE_0__);\n// const {app} = require('electron')\nvar path = __webpack_require__(/*! path */ \"path\");\n\n // require('electron-reload')(__dirname);\n\nconsole.info(\"global = \", global);\nvar win = null; // dir name is /, resolved to \"D:/\"\n\nconsole.log(\"dirname is\", path.resolve(__dirname));\n\nfunction createWindow() {\n  win = new electron__WEBPACK_IMPORTED_MODULE_0__[\"BrowserWindow\"]({\n    width: 1400,\n    height: 1200 // webPreferences: {\n    //     webSecurity: false\n    //   }\n\n  });\n  win.webContents.openDevTools(); // win.loadURL(\"file:///D:\\\\repos\\\\through-layer\\\\test\\\\electron-main-reactive-editor\\\\index.html\"); // not work\n  // win.loadURL(\"file:///D:\\\\repos\\\\through-layers\\\\dist\\\\index.html\") // worked\n  // win.loadURL(\"file:///D:\\\\repos\\\\through-layer\\\\test\\\\electron-main-reactive-editor\\\\dist\\\\index.html\"); // not work\n\n  win.loadURL(\"file:///index.html\"); // work\n\n  win.on(\"close\", function () {\n    win = null;\n  });\n}\n\nelectron__WEBPACK_IMPORTED_MODULE_0__[\"app\"].on(\"ready\", createWindow);\nelectron__WEBPACK_IMPORTED_MODULE_0__[\"app\"].on(\"window-all-closed\", function () {\n  if (process.platform !== \"darwin\") {\n    electron__WEBPACK_IMPORTED_MODULE_0__[\"app\"].quit();\n  }\n});\nelectron__WEBPACK_IMPORTED_MODULE_0__[\"app\"].on(\"activate\", function () {\n  if (win == null) {\n    createWindow();\n  }\n});\n/* WEBPACK VAR INJECTION */}.call(this, \"/\"))\n\n//# sourceURL=webpack:///./loader/index.js?");
 
 /***/ }),
 

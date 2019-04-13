@@ -3,6 +3,9 @@ const path = require("path");
 
 import  {app,BrowserWindow}  from  "electron"
 
+// require('electron-reload')(__dirname);
+
+console.info("global = ", global)
 
 let win = null;
 
@@ -11,8 +14,8 @@ console.log("dirname is", path.resolve(__dirname));
 
 function createWindow() {
     win = new BrowserWindow({
-        width: 600,
-        height: 800,
+        width: 1400,
+        height: 1200,
         // webPreferences: {
         //     webSecurity: false
         //   }
@@ -24,7 +27,7 @@ function createWindow() {
     // win.loadURL("file:///D:\\repos\\through-layers\\dist\\index.html") // worked
     // win.loadURL("file:///D:\\repos\\through-layer\\test\\electron-main-reactive-editor\\dist\\index.html"); // not work
     
-    win.loadURL("file:///index.html"); // not work
+    win.loadURL("file:///index.html"); // work
     win.on("close", () => {
         win = null
     })

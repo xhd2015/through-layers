@@ -1,6 +1,19 @@
 
 
-
+function indexOfNonEscaped(s,start,p,escapePrefix){
+    let esLen = escapePrefix.length
+    if(esLen==0){
+        throw "escape prefix cannot be empty"
+    }
+    while(start < s.length){
+        let idx = s.indexOf(p,start)
+        if(idx===0 || s.slice(idx-1, idx-1+esLen)!=escapePrefix){
+            return idx
+        }
+        start = idx+1
+    }
+    return -1
+}
 /**
  * 
  * @param {*} template 
@@ -16,7 +29,7 @@ function parseStringTemplateToArray(template,placeholderStart, placeholderEnd) {
     let placeStart = placeholderStart || "${"
     let placeEnd = placeholderEnd || "}"
     while (i < s.length) {
-        let startIdx = s.indexOf(placeStart, i)
+        let startIdx = indexOfNonEscaped(s,i,placeStart,"\\")
         if (startIdx === -1) {
             res.push({
                 type: "plain",

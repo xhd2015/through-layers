@@ -2,7 +2,7 @@ const path = require('path');
 
 module.exports = {
     // this is expected to run under root path
-    entry: './test/electron-main-reactive-editor/loader/index.js',
+    entry: './loader/index.js',
     mode: 'development',
     output: {
         path: path.resolve(__dirname, '../dist'),

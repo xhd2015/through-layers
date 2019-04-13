@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>Vue Test</title>
+    <!-- 开发环境版本，包含了有帮助的命令行警告 -->
+<!-- <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script> -->
+
+<!--downloaded-->
+<!-- <script src="vue.js"></script> -->
+
+<script>
+    // does not work
+    // let cs =  HTMLTextAreaElement.prototype.constructor
+    // HTMLTextAreaElement.prototype.constructor = function(){
+    //     cs.apply(this, arguments)
+    //     console.log("using custom constructor")
+    //     if(this.oncreated){
+    //         this.oncreated()
+    //     }
+    // }
+
+</script>
+</head>
+
+<body>
+    <div id="app">
+    </div>
+    <textarea id="textarea"></textarea>
+</body>
+<script>
+    // note the difference between attribute and [],  former is string, latter is function
+    let event = ["load", "loadeddata","show","select","change","blur","contextmenu","abort","cancel","loadedmetadata","play","close","loadstart","focus","input","invalid","error","reset"]
+    let el = document.getElementById("textarea")
+    for(let e of event){
+        el["on"+e] = function(){
+            console.log("textarea on event:" + e)
+        }
+    }
+
+</script>
+</html>

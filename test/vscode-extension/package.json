@@ -1,0 +1,14 @@
+{
+    "name": "test",
+    "version": "1.0.0",
+    "scripts": {
+        "link:node_modules:windows": "mklink /H /J node_modules ..\\..\\node_modules",
+        "link:node_modules:linux": "ln -s ../../node_modules node_modules",
+        "build": "npx webpack --config loader/webpack.config.main.js && npx webpack --config webpack.config.js",
+        "start": "npx electron dist/electron-main.js"
+    },
+    "devDependencies": {
+        "generator-code": "^1.1.50",
+        "yo": "^2.0.5"
+    }
+}

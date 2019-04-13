@@ -1,16 +1,17 @@
-
 const {
     isObject,
     isArray,
     isPlainObject,
     isString,
     setForceDeepProperty,
-    isFunction
+    isFunction,
+    _global
 } = require("./util")
 
 const {
     setDeepExistingReactiveProperty,
-    getDeepExistingProperty
+    getDeepExistingProperty,
+    setDeepForceReactiveProperty
 } = require("./vue-utils")
 
 const {
@@ -18,6 +19,31 @@ const {
     renderTemplateArray,
     templateToRender
 } = require("./template-utils")
+
+function setterOfKeyToCache(path) {
+    return function setterToCache(val) {
+        // set will always fall into data[cacheKey]
+        let vm = this
+        setDeepExistingReactiveProperty(vm, [vm._cacheRoot(), ...path.split(".")], val)
+        // this[cacheKey+"." + path]=val
+    }
+}
+// the key point is, for template#1 and template#2, where template#1 has a higher priority, and value is taken from template#2
+//                   we ensure that the final value depends on both template#1 and template#2
+function getterOfTemplateRenderers(templateRenders) {
+    return function getterFromTemplate() {
+        let vm = this
+        for (let renderer of templateRenders) {
+            let val = renderer.call(vm)
+            if (val != null) {
+                // resolved
+                return val
+            }
+        }
+        // not resolved
+        return null
+    }
+}
 
 /**
  // because the computed property has a limitation, and naturally it cannot be resolved
@@ -35,33 +61,24 @@ const {
  * @param {*} templateRenders 
  * @param path used to set, not useful for get
  */
-function toGetterSetterPair(path, templateRenders, cacheKey) {
+function getProxyGetterSetterPair(path) {
     let pair = {}
-    let segments = path.split(".")
     // let cacheKeyPrefix = cacheKey + "."
-    pair.set = function setterToCache(val) {
-        // set will always fall into data[cacheKey]
-        setDeepExistingReactiveProperty(this, [cacheKey, ...segments], val)
-        // this[cacheKey+"." + path]=val
+    pair.set = function proxiedSetter(val) {
+        let vm = this
+        return vm._getSetterOf(path).call(vm, val)
     }
-    // the key point is, for template#1 and template#2, where template#1 has a higher priority, and value is taken from template#2
-    //                   we ensure that the final value depends on both template#1 and template#2
     pair.get = function getterFromTemplate() {
         let vm = this
-        for (let renderer of templateRenders) {
-            let val = renderer.call(vm)
-            if(val!=null){
-                // resolved
-                return val
-            }
-        }
-        // not resolved
-        return null
+        return vm._getGetterOf(path).call(vm)
     }
     return pair
 }
 
 function isConfigKey(key) {
+    if (key == null) {
+        return false
+    }
     if (key === "_meta") {
         return false
     }
@@ -70,6 +87,9 @@ function isConfigKey(key) {
         return false
     }
     return true
+}
+function isEqualOrStartsWith(s,start,split){
+    return s==null? false: (s===start || s.startsWith(start+split))
 }
 
 
@@ -84,21 +104,21 @@ function getStringOrFunctionArray(v) {
             }
         }
         return v
-    }else if(isFunction(v)){
+    } else if (isFunction(v)) {
         return [v]
     }
-    throw "value is not a string, an array or a function"
+    throw "value is not a string, an array or a function, v=" + v
 }
 
 /**
  * to flatten keys, such that { a0:{ b0:"b0", b1:"b1" }} ===> {"a0.b0":"b0", "a0.b1":"b1"}
- * @param {} value 
- * @param {*} prefix 
- * @param {*} res 
+ * @param {Object,Function, Array} value 
+ * @param {string} prefix 
+ * @param {Object} res 
  */
 function toFlatten(value, prefix, res) {
     if (!isPlainObject(value)) {
-        res[prefix] = getStringOrFunctionArray(value)
+        res[prefix] = value
     } else {
         for (let k in value) {
             toFlatten(value[k], prefix + "." + k, res)
@@ -108,28 +128,30 @@ function toFlatten(value, prefix, res) {
 
 /**
  * normalize config, so that all keys are flatten, all values are string array
- * meta keys  and empty key "" is not kept
- * @param {*} config 
+ * meta keys , cacehRoot, and empty key "" are not kept
+ * @param {Object} config 
  */
-function normalizeConfig(config) {
-    let newConfig = {}
+function normalizeConfig(cacheRoot, config) {
+    let cache = {}
+    let computed = {}
     for (let key in config) {
         let value = config[key]
         if (!isConfigKey(key)) {
             continue
         }
-        toFlatten(value, key, newConfig)
+        let cfg = isEqualOrStartsWith(key,cacheRoot,".")? cache:computed
+        toFlatten(value, key, cfg)
     }
-    return newConfig
+    return {cache, computed}
 }
 
 
-function cachedGetByKeyPath(keyPath){
+function cachedGetByKeyPath(keyPath) {
     let vm = this
     if (keyPath.startsWith(vm._cachePrefix())) {
         // data
         // console.debug("getDeepExistingProperty = ", getDeepExistingProperty)
-        return  getDeepExistingProperty(vm, keyPath.split("."))
+        return getDeepExistingProperty(vm, keyPath.split("."))
     } else {
         // computed
         if (!(keyPath in vm)) {
@@ -138,40 +160,146 @@ function cachedGetByKeyPath(keyPath){
         return vm[keyPath]
     }
 }
-function cachedSetByKeyPath(keyPath,val){
+
+function cachedSetByKeyPath(keyPath, val) {
     let vm = this
-    if(keyPath.startsWith(vm._cachePrefix())){
+    if (keyPath.startsWith(vm._cachePrefix())) {
         setDeepExistingReactiveProperty(vm, [...keyPath.split(".")], val)
-    }else{
-        vm[keyPath]=val
+    } else {
+        vm[keyPath] = val
     }
 }
 
-function getPresetData(){
+function getPresetData() {
     return {}
 }
-function getPresetMethods(cacheRoot,cachPrefix){
-    return {
-        get:cachedGetByKeyPath,
-        set:cachedSetByKeyPath,
-        cachedGetByKeyPath,
-        cachedSetByKeyPath,
-        _cachePrefix(){ return cachPrefix },
-        _cacheRoot() { return cacheRoot}
-    }
-}
-function makeAllPropertyData(cacheRoot,cachePrefix,normalizedConfig){
-    let localData =  getPresetData()
+
+
+
+function makeAllPropertyData(cacheRoot, normalizedConfig) {
+    let localData = getPresetData()
+    localData[cacheRoot] = {}
     // add cache.* to data
-    for (let k in normalizedConfig) {
-        if (k === cacheRoot || k.startsWith(cachePrefix)) {
-            continue
-        }
-        setForceDeepProperty(localData, [cacheRoot, ...k.split(".")], null)
+    for (let k in normalizedConfig.computed) {
+        let pathArray = [cacheRoot,...k.split(".")]
+        setForceDeepProperty(localData,pathArray, null)
     }
+    for(let k in normalizedConfig.cache){
+        let pathArray = k.split(".")
+        setForceDeepProperty(localData,pathArray, normalizedConfig.cache[k])
+    }
+    console.debug("all property data = ", localData)
     return localData
 }
 
+
+/**
+ * transfer a configuration to a group of renderers
+ * @param {PlainObject, String Template,or Function} conf 
+ */
+function templateConfToRenderer(conf) {
+    let value = getStringOrFunctionArray(conf)
+    let templateRenders = []
+    for (let v of value) {
+        let renderFunction
+        if (isString(v)) {
+            renderFunction = templateToRender(v, cachedGetByKeyPath)
+        } else if (isFunction(v)) {
+            renderFunction = v
+        }
+        templateRenders.push(renderFunction)
+    }
+    return templateRenders
+}
+
+function setOrCreateCachePath(key, value) {
+    setDeepForceReactiveProperty(vm[vm._cacheRoot()], key.split("."), value)
+}
+
+/**
+ * early set
+ * @param accepter  vm or methods
+ */
+function earlySetGetter(accepter,key,conf,str){
+    let templateRenderers = templateConfToRenderer(conf)
+    accepter._setGetterFunctionString(key, str == null ? conf.toString() : str)
+    accepter._setGetterOf(key, getterOfTemplateRenderers(templateRenderers))
+}
+/**
+ * just change the getter, setter and other things are not touched
+ * after this, vm.$forceUpdate() will be called
+ * @param {*} key 
+ * @param {*} conf 
+ */
+function changeGetterConfig(key, conf, str) {
+    let vm = this
+    earlySetGetter(vm,key,conf,str)
+    vm.$forceUpdate()
+}
+
+function changeGetterConfigString(key, confString) {
+    this.changeGetterConfig(key, eval("(" + confString + ")"), confString)
+}
+
+function emptyOnNullGetter() {
+    let vm = this
+    return function (k) {
+        let v = vm.get(k)
+        return v == null ? "" : v
+    }
+}
+
+function getPresetMethods(cacheRoot, cachPrefix, manifest) {
+    let getterMap = {}
+    let setterMap = {}
+    let getterStringMap = {}
+    return {
+        get: cachedGetByKeyPath,
+        set: cachedSetByKeyPath,
+        cachedGetByKeyPath,
+        cachedSetByKeyPath,
+        emptyOnNullGetter,
+        setOrCreateCachePath,
+        changeGetterConfig,
+        changeGetterConfigString,
+
+        getGetterFunctionString(key) {
+            return getterStringMap[key]
+        },
+
+        _cachePrefix() {
+            return cachPrefix
+        },
+        _cacheRoot() {
+            return cacheRoot
+        },
+        _getGetterOf(key) {
+            return getterMap[key]
+        },
+        _getSetterOf(key) {
+            return setterMap[key]
+        },
+        _setGetterOf(key, getter) {
+            getterMap[key] = getter
+        },
+        _setSetterOf(key, setter) {
+            setterMap[key] = setter
+        },
+        _setGetterFunctionString(key, conf) {
+            getterStringMap[key] = conf
+        },
+        getManifest() {
+            return manifest
+        }
+    }
+}
+
+function getPresetCreatedHook() {
+    return []
+}
+function getBeforeCreateHook(){
+    return []
+}
 /**
  * parse config to computed, config has the form:{
  *     _meta:{
@@ -210,31 +338,51 @@ function parseDataComputed(config) {
     let cacheRoot = meta["cacheRoot"] || "cache"
     let dataAsFunction = "dataAsFunction" in meta ? (!!meta.dataAsFunction) : true
     let computed = {}
-    let normalizedConfig = normalizeConfig(config)
+    let normalizedConfig = normalizeConfig(cacheRoot, config)
     let cachePrefix = cacheRoot + "."
-    let data = function(){ return makeAllPropertyData(cacheRoot,cachePrefix,normalizedConfig) }
+    let data = function () {
+        return makeAllPropertyData(cacheRoot, normalizedConfig)
+    }
     if (!dataAsFunction) {
         data = data()
     }
 
-    for (let key in normalizedConfig) {
-        let value = normalizedConfig[key]
-        let templateRenders = []
-        for (let v of value) {
-            let renderFunction
-            if(isString(v)){
-                renderFunction= templateToRender(v, cachedGetByKeyPath) 
-            }else if(isFunction(v)){
-                renderFunction=v
-            }
-            templateRenders.push(renderFunction)
-        }
-        computed[key] = toGetterSetterPair(key, templateRenders, cacheRoot)
+    let manifest = {
+        properties: {},
+        methods: {}
     }
+    let methods = getPresetMethods(cacheRoot, cachePrefix, manifest)
+    for (let k in computed) {
+        manifest.properties[k] = {}
+    }
+    for (let k in methods) {
+        manifest.methods[k] = {}
+    }
+
+
+    for (let key in normalizedConfig.computed) {
+        computed[key] = getProxyGetterSetterPair(key)
+    }
+    // _setter, _getter, the changeable proxy
+    let beforeCreate = getBeforeCreateHook()
+    let created = getPresetCreatedHook()
+
+    beforeCreate.push(function () {
+        let vm = this
+        for (let key in normalizedConfig.computed) {
+            earlySetGetter(methods,key,normalizedConfig.computed[key])
+            methods._setSetterOf(key, setterOfKeyToCache(key))
+        }
+    })
+   
     return {
         computed,
         data,
-        methods: getPresetMethods(cacheRoot,cachePrefix)
+        methods,
+        created,
+        watch:{},
+        mounted: [],
+        beforeCreate
     }
 }
 
@@ -243,5 +391,6 @@ function parseDataComputed(config) {
 // }
 
 export {
-    parseDataComputed
+    parseDataComputed,
+    emptyOnNullGetter
 }

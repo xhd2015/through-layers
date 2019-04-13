@@ -1,0 +1,32 @@
+{
+    "compilerOptions": {
+      "outDir": "./dist/",
+      "allowSyntheticDefaultImports": true,
+      "lib": [
+    //    "dom",
+        // "es2015",
+        "es2016"
+    ],
+      "noImplicitAny": true,
+      "module": "es6",
+      "target": "es6",// must be es6, because node will only accept this
+      "moduleResolution": "node",
+      "jsx": "react",
+      "allowJs": true,
+      "sourceMap": true
+    },
+    "files": [
+        "antlr.test.ts",
+        // "node_modules/antlr4ts/tree/ParseTreeVisitor.d.ts",
+        // "my.ts",
+        // "node_modules/antlr4ts/tree/ParseTreeListener.d.ts",
+        // "antlr.test.ts"
+      ],
+    "include": [
+        // "node_modules/**/*.d.ts"
+    ],
+    "exclude": [
+        "node_modules",
+        // "**/*.spec.ts"
+    ]
+  }

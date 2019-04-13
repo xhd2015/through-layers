@@ -21,6 +21,9 @@ function isFunction(obj){
 function isType(obj,type){
     return obj!==null && obj.constructor === type
 }
+function isMap(obj){
+    return obj!=null && obj.constructor===Map
+}
 
 function setForceDeepProperty(obj,pathArray,value){
     let currentTarget = obj
@@ -38,11 +41,26 @@ function setForceDeepProperty(obj,pathArray,value){
     }
 }
 
+function plainObjectToMap(obj){
+    if(isMap(obj)){
+        return obj
+    }
+    let m = new Map()
+    for(let k in obj){
+        m.set(k, obj[k])
+    }
+    return m
+}
+
+let _global = global!=null?global:window
+
 export {
     isObject,
     isArray,
     isPlainObject,
     isString,
     setForceDeepProperty,
-    isFunction
+    isFunction,
+    plainObjectToMap,
+    _global
 }

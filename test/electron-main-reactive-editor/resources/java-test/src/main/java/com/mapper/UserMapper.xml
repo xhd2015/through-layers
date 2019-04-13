@@ -1,0 +1,12 @@
+<!DOCTYPE Mapper>
+<mapper namespace="com.mapper.UserMapper">
+   
+   <insert id="createUser" parameterType="com.model.User">
+       <selectKey>
+         SELECT LAST_INSERT_ID() AS id
+       </selectKey>
+       INSERT INTO t_user(name,age) VALUES(#{name},#{age});
+   </insert>
+
+   <!--may be inserted here-->
+</mapper>
