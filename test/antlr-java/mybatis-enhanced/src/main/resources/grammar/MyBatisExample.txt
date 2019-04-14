@@ -1,0 +1,5 @@
+
+exec [ sqlSource ] User user = 
+begin /* the sql */
+    SELECT * from t_ad_info WHERE t_ad_info.id > 0
+end
