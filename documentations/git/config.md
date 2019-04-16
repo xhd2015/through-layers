@@ -1,6 +1,6 @@
 # Config Files
 File|    Option
--   |    -
+--   |    -
 /etc/gitconfig|--system
 ~/.gitconfig, ~/.config/git/config|--global
 .git/config   | --local
@@ -8,7 +8,7 @@ File|    Option
 # Basic Configuration
 
 Config |  Value  | Example
-- | - | -
+-- | - | -
 **Core** | - | -
 core.editor | `vi`,`emacs`,default `vi` | `emacs`
 commit.template | a template file, used when a commit message is not specified | ~/.gitmessage.txt

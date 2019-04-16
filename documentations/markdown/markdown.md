@@ -23,6 +23,7 @@
  note there is space between.
 
 # Table
+NOTE: better to use double line`--` instead of `-` in the second, else it may be recognized as a list rather that a table by github.
 ```markdown
 Head|Head|Head
 ---|:---:|---:
