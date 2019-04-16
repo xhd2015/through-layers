@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Configuration monitorInterval="1" status="ERROR" strict="true" name="LogConfig">
+    <Properties>
+        <Property name="log.layout">%d %-5p %t (%c:%L) - %m%n</Property>
+    </Properties>
+    <Apenders>
+        <Appender type="Console" name="STDOUT">
+            <Target>SYSTEM_OUT</Target>
+            <Layout type="PatternLayout" pattern="${log.layout}"/>
+        </Appender>
+    </Apenders>
+    <Loggers>
+        <Root level="info">
+            <AppenderRef ref="STDOUT"/>
+        </Root>
+        <!--<Logger name="com.garfield.learn" level="debug"/>-->
+        <!--<Logger name="com.garfield.learnp" level="info"/>-->
+    </Loggers>
+</Configuration>
