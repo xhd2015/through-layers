@@ -1,0 +1,23 @@
+{
+  parserClass="com.fulton_shaw.idea.plugin.lang.properties.parser.SimpleParser"
+  parserUtilClass="com.fulton_shaw.idea.plugin.lang.properties.parser.SimpleParserUtil"
+
+  extends="com.intellij.extapi.psi.ASTWrapperPsiElement"
+
+  psiClassPrefix="Simple"
+  psiImplClassSuffix="Impl"
+  psiPackage="com.fulton_shaw.idea.plugin.lang.properties.psi"
+  psiImplPackage="com.fulton_shaw.idea.plugin.lang.properties.psi.impl"
+
+  elementTypeHolderClass="com.fulton_shaw.idea.plugin.lang.properties.psi.SimpleTypes"
+  elementTypeClass="com.fulton_shaw.idea.plugin.lang.properties.psi.SimpleElementType"
+  tokenTypeClass="com.fulton_shaw.idea.plugin.lang.properties.psi.SimpleTokenType"
+
+  psiImplUtilClass="com.fulton_shaw.idea.plugin.lang.properties.psi.impl.SimplePsiImplUtil"
+}
+
+simpleFile ::= item_*
+
+private item_ ::= (property|COMMENT|CRLF)
+
+property ::= (KEY? SEPARATOR VALUE?) | KEY

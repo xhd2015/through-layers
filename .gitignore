@@ -5,3 +5,4 @@ node_modules
 # maven generated
 target
 .gradle
+idea-sandbox

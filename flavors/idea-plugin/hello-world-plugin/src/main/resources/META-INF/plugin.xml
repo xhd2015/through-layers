@@ -16,9 +16,24 @@
 
     <extensions defaultExtensionNs="com.intellij">
         <!-- Add your extensions here -->
+            <fileTypeFactory implementation="com.fulton_shaw.idea.plugin.lang.properties.SimpleFileTypeFactory"/>
+        <lang.parserDefinition language="Simple" implementationClass="com.fulton_shaw.idea.plugin.lang.properties.SimpleParserDefinition"/>
+        <lang.syntaxHighlighterFactory language="Simple" implementationClass="com.fulton_shaw.idea.plugin.lang.properties.SimpleSyntaxHighlighterFactory"/>
+        <annotator language="JAVA" implementationClass="com.fulton_shaw.idea.plugin.lang.properties.SimpleAnnotator"/>
+        <codeInsight.lineMarkerProvider language="JAVA" implementationClass="com.fulton_shaw.idea.plugin.lang.properties.SimpleLineMarkerProvider"/>
+
+        <!--provide language support-->
+        <fileType.fileViewProviderFactory filetype="java" implementationClass="com.fulton_shaw.idea.plugin.lang.properties.view.PropertiesInJavaFileViewProviderFactory" />
     </extensions>
 
     <actions>
         <!-- Add your actions here -->
+        <action class="com.fulton_shaw.idea.plugin.hello.world.ToUpperCaseAction" id="ToUpperCaseAction" text="To Upper Case">
+            <add-to-group group-id="EditorPopupMenu" anchor="last"/>
+        </action>
+        <action class="com.fulton_shaw.idea.plugin.mybatis.ImplementMapperMethodAction" id="ImplementMapperMethodAction" text="Implement as XML">
+            <add-to-group group-id="EditorPopupMenu" anchor="last"/>
+        </action>
     </actions>
+
 </idea-plugin>

@@ -18,15 +18,24 @@ dependencies {
     compile group: 'org.apache.logging.log4j', name: 'log4j-core', version: '2.11.2'
     compile group: 'org.apache.logging.log4j', name: 'log4j-api', version: '2.11.2'
     compile group: 'org.apache.logging.log4j', name: 'log4j-slf4j-impl', version: '2.11.2'
-// https://mvnrepository.com/artifact/org.slf4j/slf4j-api
+    // https://mvnrepository.com/artifact/org.slf4j/slf4j-api
     compile group: 'org.slf4j', name: 'slf4j-api', version: '1.7.26'
 }
 
 intellij {
     version '2018.2.2'
 }
+
 patchPluginXml {
     changeNotes """
       Add change notes here.<br>
       <em>most HTML tags may be used</em>"""
+}
+sourceSets {
+    main {
+        java {
+            srcDirs 'src/main/java'
+            srcDirs 'src/main/gen'
+        }
+    }
 }

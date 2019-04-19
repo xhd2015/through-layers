@@ -1,3 +1,4 @@
+<<<<<<< Updated upstream
 <?xml version="1.0" encoding="UTF-8"?>
 <Configuration monitorInterval="1" status="ERROR" strict="true" name="LogConfig">
     <Properties>
@@ -16,4 +17,41 @@
         <!--<Logger name="com.garfield.learn" level="debug"/>-->
         <!--<Logger name="com.garfield.learnp" level="info"/>-->
     </Loggers>
+=======
+<?xml version="1.0" encoding="UTF-8"?>
+<Configuration status="debug"  package="com.vivo.internet.logLayout">
+  <Appenders>
+    <Console name="Console" target="SYSTEM_OUT">
+      <ThresholdFilter onMatch="Accept" onMisMath="Deny" level="debug"/>
+      <PatternLayout pattern="%d{HH:mm:ss.SSS} [%t] %-5level %logger{36} - %msg%n"/>
+    </Console>
+  </Appenders>
+  
+  <Loggers>
+  
+   <logger name="log4j.logger.org.mybatis" level="debug" additivity="false">
+      <appender-ref ref="Console"/>
+    </logger>
+    <logger name="log4j.logger.java.sql" level="debug" additivity="false">
+      <appender-ref ref="Console"/>
+    </logger>
+    <logger name="log4j.logger.java.sql.Connection" level="debug" additivity="false">
+      <appender-ref ref="Console"/>
+    </logger>
+    <logger name="log4j.logger.java.sql.Statement" level="debug" additivity="false">
+      <appender-ref ref="Console"/>
+    </logger>
+    <logger name="log4j.logger.java.sql.PreparedStatement" level="debug" additivity="false">
+      <appender-ref ref="Console"/>
+    </logger>
+    <logger name="log4j.logger.java.sql.ResultSet" level="debug" additivity="false">
+      <appender-ref ref="Console"/>
+    </logger>
+    
+    <Root level="debug">
+      <AppenderRef ref="Console"/>
+    </Root>
+    
+  </Loggers>
+>>>>>>> Stashed changes
 </Configuration>

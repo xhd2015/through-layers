@@ -1,0 +1,12 @@
+<!DOCTYPE mapper>
+<mapper namespace="Test">
+    <!--this is just a comment-->
+    <update id="update">
+        UPDATE
+          t_ad_info
+        SET
+           name = #{name}
+        WHERE
+            id = #{id}
+    </update>
+</mapper>

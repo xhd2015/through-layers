@@ -1,0 +1,13 @@
+<!DOCTYPE mapper>
+<mapper namespace="com.fulton_shaw.test.mapper.MyMapper">
+    <!--&lt;!&ndash;this is just a comment&ndash;&gt;-->
+    <select id="add">
+        SELECT * FROM t_ad_inf owhere
+    </select>
+    <update id="update">
+
+    </update>
+    <insert id="insert">
+        INSERT INTO t_ad_info a WHERE a = 0;
+    </insert>
+</mapper>
