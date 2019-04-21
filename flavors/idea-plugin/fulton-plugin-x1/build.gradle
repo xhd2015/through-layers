@@ -8,10 +8,29 @@ version '1.0-SNAPSHOT'
 
 sourceCompatibility = 1.8
 
+// for mavenLocal
+System.properties.setProperty("maven.repo.local", "D:/Pool/maven-repo")
+
+
+
+
 repositories {
     mavenCentral()
+    String mvnUrlProperty = "repositories.maven.url"
+    String mvnLocalProperty = "maven.repo.local"
+    if (System.properties.containsKey(mvnUrlProperty)) {
+        maven {
+//            url "http://nexus.vivo.xyz/nexus/content/groups/public/"
+            url mvnUrlProperty
+        }
+    }
     maven {
-        url "http://nexus.vivo.xyz/nexus/content/groups/public/"
+        url "https://jetbrains.bintray.com/pty4j"
+    }
+
+
+    if (System.properties.containsKey(mvnLocalProperty)) {
+        mavenLocal()
     }
 }
 
@@ -23,7 +42,8 @@ dependencies {
     compile group: 'org.apache.logging.log4j', name: 'log4j-slf4j-impl', version: '2.11.2'
     // https://mvnrepository.com/artifact/org.slf4j/slf4j-api
     compile group: 'org.slf4j', name: 'slf4j-api', version: '1.7.26'
-    compile group: 'com.fulton_shaw',name:'fulton-commons',version:'1.0.2-SNAPSHOT'
+    compile group: 'com.fulton_shaw', name: 'fulton-commons', version: '1.0.2-SNAPSHOT'
+    compile group:'org.jetbrains.pty4j', name:'pty4j',version:'0.8.6'
 }
 
 intellij {
@@ -33,4 +53,11 @@ patchPluginXml {
     changeNotes """
       Add change notes here.<br>
       <em>most HTML tags may be used</em>"""
+}
+
+task debug {
+    doLast {
+        println project
+        println System.properties.getProperty("maven.repo.local")
+    }
 }

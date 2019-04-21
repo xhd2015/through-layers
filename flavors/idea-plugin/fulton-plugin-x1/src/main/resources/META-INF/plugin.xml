@@ -8,6 +8,14 @@
     <em>most HTML tags may be used</em>
     ]]></description>
 
+
+    <project-components>
+        <component>
+            <implementation-class>com.fulton_shaw.idea.plugin.x1.action.experiment.DeployConsole</implementation-class>
+        </component>
+    </project-components>
+
+
     <!-- please see http://www.jetbrains.org/intellij/sdk/docs/basics/getting_started/plugin_compatibility.html
          on how to target different products -->
     <!-- uncomment to enable plugin in all products
@@ -47,5 +55,10 @@
             <add-to-group group-id="EditorPopupMenu" relative-to-action="EditorPopupMenu1" anchor="before"/>
         </action>
 
+        <action id="fulton.plugin.DeployConsoleAction"
+                class="com.fulton_shaw.idea.plugin.x1.action.experiment.BaseExperimentAction"
+                text="Print a Message to Deploy Console" description="Just a debug information">
+            <add-to-group group-id="EditorPopupMenu" anchor="first"/>
+        </action>
     </actions>
 </idea-plugin>

@@ -11,6 +11,11 @@
     Enter short description for your plugin here.&lt;br&gt;
     &lt;em&gt;most HTML tags may be used&lt;/em&gt;
     </description>
+  <project-components>
+    <component>
+      <implementation-class>com.fulton_shaw.idea.plugin.x1.action.experiment.DeployConsole</implementation-class>
+    </component>
+  </project-components>
   <extensions defaultExtensionNs="com.intellij">
     <annotator language="JAVA" implementationClass="com.fulton_shaw.idea.plugin.x1.action.mapper.MapperMethodNameDuplicateAnnotator" id="MapperMethodNameDuplicateAnnotator"/>
     <gotoDeclarationHandler implementation="com.fulton_shaw.idea.plugin.x1.action.mapper.MapperXmlGotoDeclarationHandler" id="MapperXmlGotoDeclarationHandler"/>
@@ -33,7 +38,10 @@
     </action>
     <action class="com.fulton_shaw.idea.plugin.x1.action.test.CreateTestAction" id="CreateTestAction" text="Create Test">
       <add-to-group group-id="ProjectViewPopupMenu" relative-to-action="CutCopyPasteGroup" anchor="after"/>
-      <add-to-group group-id="EditorPopupMenu" relative-to-action="CutCopyPasteGroup" anchor="after"/>
+      <add-to-group group-id="EditorPopupMenu" relative-to-action="EditorPopupMenu1" anchor="before"/>
+    </action>
+    <action id="fulton.plugin.DeployConsoleAction" class="com.fulton_shaw.idea.plugin.x1.action.experiment.BaseExperimentAction" text="Print a Message to Deploy Console" description="Just a debug information">
+      <add-to-group group-id="EditorPopupMenu" anchor="first"/>
     </action>
   </actions>
 </idea-plugin>

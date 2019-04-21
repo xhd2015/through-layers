@@ -6,3 +6,4 @@ node_modules
 target
 .gradle
 idea-sandbox
+*.iml
