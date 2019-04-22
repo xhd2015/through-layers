@@ -43,5 +43,11 @@
     <action id="fulton.plugin.DeployConsoleAction" class="com.fulton_shaw.idea.plugin.x1.action.experiment.BaseExperimentAction" text="Print a Message to Deploy Console" description="Just a debug information">
       <add-to-group group-id="EditorPopupMenu" anchor="first"/>
     </action>
+    <action class="com.fulton_shaw.idea.plugin.x1.action.experiment.TerminalTextAction" id="TerminalTextAction" text="Test Terminal">
+      <add-to-group group-id="EditorPopupMenu" anchor="last"/>
+    </action>
+    <action class="com.fulton_shaw.idea.plugin.x1.action.experiment.ActionBasedTester" id="ActionBasedTester" text="Invoke a Test">
+      <add-to-group group-id="EditorPopupMenu" anchor="last"/>
+    </action>
   </actions>
 </idea-plugin>

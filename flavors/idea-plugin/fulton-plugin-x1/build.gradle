@@ -21,11 +21,15 @@ repositories {
     if (System.properties.containsKey(mvnUrlProperty)) {
         maven {
 //            url "http://nexus.vivo.xyz/nexus/content/groups/public/"
-            url mvnUrlProperty
+            url System.properties.get(mvnUrlProperty)
         }
     }
     maven {
         url "https://jetbrains.bintray.com/pty4j"
+    }
+
+    flatDir {
+        dirs "./lib"
     }
 
 
@@ -43,7 +47,12 @@ dependencies {
     // https://mvnrepository.com/artifact/org.slf4j/slf4j-api
     compile group: 'org.slf4j', name: 'slf4j-api', version: '1.7.26'
     compile group: 'com.fulton_shaw', name: 'fulton-commons', version: '1.0.2-SNAPSHOT'
-    compile group:'org.jetbrains.pty4j', name:'pty4j',version:'0.8.6'
+//    compile group:'org.jetbrains.pty4j', name:'pty4j',version:'0.8.6'
+    // https://mvnrepository.com/artifact/com.jcraft/jsch
+//    compile group: 'com.jcraft', name: 'jsch', version: '0.1.55'
+// https://mvnrepository.com/artifact/org.jetbrains.jediterm/jediterm-pty
+//    compile group: 'org.jetbrains.jediterm', name: 'jediterm-pty', version: '2.14'
+
 }
 
 intellij {
