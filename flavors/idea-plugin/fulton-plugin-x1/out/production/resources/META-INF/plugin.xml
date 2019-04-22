@@ -60,5 +60,13 @@
                 text="Print a Message to Deploy Console" description="Just a debug information">
             <add-to-group group-id="EditorPopupMenu" anchor="first"/>
         </action>
+
+        <action id="fulton.plugin.TerminalTestAction"
+                class="com.fulton_shaw.idea.plugin.x1.action.experiment.TerminalTestAction"
+                text="Invoke a Test" description="invokee test suite">
+            <add-to-group group-id="EditorPopupMenu" anchor="last"/>
+        </action>
+
+
     </actions>
 </idea-plugin>
