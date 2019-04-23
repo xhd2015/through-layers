@@ -68,5 +68,12 @@
         <action class="com.fulton_shaw.idea.plugin.x1.action.experiment.ActionBasedTester" id="ActionBasedTester" text="Invoke a Test">
             <add-to-group group-id="EditorPopupMenu" anchor="last"/>
         </action>
+        <action id="fulton.plugin.TerminalTestAction"
+                class="com.fulton_shaw.idea.plugin.x1.action.experiment.TerminalTestAction"
+                text="Invoke a Test" description="invokee test suite">
+            <add-to-group group-id="EditorPopupMenu" anchor="last"/>
+        </action>
+
+
     </actions>
 </idea-plugin>

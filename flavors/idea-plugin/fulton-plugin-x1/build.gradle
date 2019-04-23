@@ -52,7 +52,6 @@ dependencies {
 //    compile group: 'com.jcraft', name: 'jsch', version: '0.1.55'
 // https://mvnrepository.com/artifact/org.jetbrains.jediterm/jediterm-pty
 //    compile group: 'org.jetbrains.jediterm', name: 'jediterm-pty', version: '2.14'
-
 }
 
 intellij {
