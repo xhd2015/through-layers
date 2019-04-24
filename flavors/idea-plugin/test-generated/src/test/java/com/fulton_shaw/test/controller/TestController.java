@@ -5,7 +5,5 @@ import org.junit.Test;
 public class TestController {
     @Test
     public void testGetName() {
-        Controller controller = new Controller();
-        Assert.assertTrue(controller.getName()!=null);
     }
 }

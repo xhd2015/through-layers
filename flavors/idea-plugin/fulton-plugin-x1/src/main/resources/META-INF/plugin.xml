@@ -42,7 +42,6 @@
             <add-to-group group-id="EditorPopupMenu" relative-to-action="CopyReference" anchor="after"/>
         </group>
 
-
         <action class="com.fulton_shaw.idea.plugin.x1.action.string.ConfigIdentifierToSnakeCase" id="ConfigIdentifierToConfigCase" text="Copy as Snake Case(config.name)">
             <add-to-group group-id="ConfigConvertGroup" anchor="first"/>
         </action>
@@ -63,24 +62,24 @@
             <add-to-group group-id="EditorPopupMenu" relative-to-action="EditorPopupMenu1" anchor="before"/>
         </action>
 
-        <action id="fulton.plugin.DeployConsoleAction"
-                class="com.fulton_shaw.idea.plugin.x1.action.experiment.BaseExperimentAction"
-                text="Print a Message to Deploy Console" description="Just a debug information">
-            <add-to-group group-id="EditorPopupMenu" anchor="first"/>
-        </action>
+        <!--<action id="fulton.plugin.DeployConsoleAction"-->
+                <!--class="com.fulton_shaw.idea.plugin.x1.action.experiment.BaseExperimentAction"-->
+                <!--text="Print a Message to Deploy Console" description="Just a debug information">-->
+            <!--<add-to-group group-id="EditorPopupMenu" anchor="first"/>-->
+        <!--</action>-->
 
-        <action class="com.fulton_shaw.idea.plugin.x1.action.experiment.TerminalTextAction" id="TerminalTextAction" text="Test Terminal">
-            <add-to-group group-id="EditorPopupMenu" anchor="last"/>
-        </action>
+        <!--<action class="com.fulton_shaw.idea.plugin.x1.action.experiment.TerminalTextAction" id="TerminalTextAction" text="Test Terminal">-->
+            <!--<add-to-group group-id="EditorPopupMenu" anchor="last"/>-->
+        <!--</action>-->
 
-        <action class="com.fulton_shaw.idea.plugin.x1.action.experiment.ActionBasedTester" id="ActionBasedTester" text="Invoke a Test">
-            <add-to-group group-id="EditorPopupMenu" anchor="last"/>
-        </action>
-        <action id="fulton.plugin.TerminalTestAction"
-                class="com.fulton_shaw.idea.plugin.x1.action.experiment.TerminalTestAction"
-                text="Invoke a Test" description="invokee test suite">
-            <add-to-group group-id="EditorPopupMenu" anchor="last"/>
-        </action>
+        <!--<action class="com.fulton_shaw.idea.plugin.x1.action.experiment.ActionBasedTester" id="ActionBasedTester" text="Invoke a Test">-->
+            <!--<add-to-group group-id="EditorPopupMenu" anchor="last"/>-->
+        <!--</action>-->
+        <!--<action id="fulton.plugin.TerminalTestAction"-->
+                <!--class="com.fulton_shaw.idea.plugin.x1.action.experiment.TerminalTestAction"-->
+                <!--text="Invoke a Test" description="invokee test suite">-->
+            <!--<add-to-group group-id="EditorPopupMenu" anchor="last"/>-->
+        <!--</action>-->
 
         <group class="com.fulton_shaw.idea.plugin.x1.action.terminal.group.XTerminalActionGroup" text="X Terminals" id="XTerminalActionGroup" popup="true">
             <add-to-group group-id="EditorPopupMenu" relative-to-action="EditorPopupMenu1" anchor="before"/>

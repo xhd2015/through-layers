@@ -69,9 +69,9 @@ intellij {
     // should download sources while building?
     downloadSources true
 }
+// patch to the plugin.xml
 patchPluginXml {
     changeNotes """
-    
     2019-4-24 : released the version 1.0, added XTerminal and other minor features
 """
 }

@@ -67,11 +67,11 @@ public class CreateTestAction extends AnAction {
         WriteCommandAction.runWriteCommandAction(project, new Runnable() {
             @Override
             public void run() {
-
                 VirtualFile testJavaDir = VirtualFileUtils.getOrCreateTestJavaSourceDir(srcDir);
                 if (testJavaDir == null || !testJavaDir.exists()) {
                     return;
                 }
+                // create the test file
                 VirtualFile theTestFile = VirtualFileUtils.findOrCreateDataByPackage(testJavaDir, psiJavaFile.getPackageName(), "Test" + psiJavaFile.getName());
                 PsiJavaFile testPsiFile = (PsiJavaFile) PsiManager.getInstance(project).findFile(theTestFile);
                 JavaFileAdapter testAdapter = new JavaFileAdapter(testPsiFile);
@@ -84,12 +84,10 @@ public class CreateTestAction extends AnAction {
                 if (testClz == null) {
                     testClz = elementFactory.createClass("Test" + localPsiClass.get().getName());
                     testClz.getModifierList().setModifierProperty(PsiModifier.PUBLIC, true);
-                    // TODO check if we need to add it
-                    testPsiFile.add(testClz);
+                    testClz = (PsiClass) testPsiFile.add(testClz);
                     // refresh now
-                    PsiDocumentManager.getInstance(project).doPostponedOperationsAndUnblockDocument(FileDocumentManager.getInstance().getDocument(theTestFile));
-                    testAdapter = new JavaFileAdapter(testPsiFile);
-                    testClz = testAdapter.getThePublicClass();
+//                    PsiDocumentManager.getInstance(project).doPostponedOperationsAndUnblockDocument(FileDocumentManager.getInstance().getDocument(theTestFile));
+                    testAdapter.refresh();
                 }
                 PsiElement toNav = testClz;
                 PsiMethod testMethod = null;
@@ -104,9 +102,8 @@ public class CreateTestAction extends AnAction {
 //                        testMethod = elementFactory.createMethodFromText("@Test public void " + methodName + "(){}", testClz);
                         PsiUtils.importIfNecessary(testPsiFile, elementFactory, "org.junit", "Test");
                         testMethod = elementFactory.createMethodFromText("@Test public void " + testMethodName + "(){}", testClz);
-                        testClz.add(testMethod);
-                        PsiDocumentManager.getInstance(project).doPostponedOperationsAndUnblockDocument(FileDocumentManager.getInstance().getDocument(theTestFile));
-                        testMethod = testAdapter.findPsiMethods(testMethodName, false).get(0);
+                        testMethod = (PsiMethod) testClz.add(testMethod);
+//                        PsiDocumentManager.getInstance(project).doPostponedOperationsAndUnblockDocument(FileDocumentManager.getInstance().getDocument(theTestFile));
                     }
                     toNav = testMethod;
                 }

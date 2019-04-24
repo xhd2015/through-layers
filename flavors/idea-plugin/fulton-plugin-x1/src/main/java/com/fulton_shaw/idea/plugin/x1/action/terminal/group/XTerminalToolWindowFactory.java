@@ -25,7 +25,10 @@ public class XTerminalToolWindowFactory implements ToolWindowFactory , DumbAware
         ContentFactory contentFactory = ContentFactory.SERVICE.getInstance();
         Content content = contentFactory.createContent(xTerminalToolWindow.getRootComponent(), "X Terminal", false);
 
+        // dynamic register
 //        ToolWindow toolWindow = toolWindowManager.registerToolWindow("com.fulton_shaw.idea.plugin.x1.action.experiment.DeployConsole.console", true, ToolWindowAnchor.BOTTOM);
+
+        // the tool window content manager manages a series of tabs
         toolWindow.getContentManager().addContent(content);
     }
 }

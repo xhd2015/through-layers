@@ -48,7 +48,12 @@ public class JavaFileAdapter {
         return Arrays.asList(methods);
     }
 
-    public void refresh(){
-        thePublicClass = null;
+    public void refresh(PsiJavaFile psiJavaFile) {
+        this.javaFile = psiJavaFile;
+        this.refresh();
+    }
+
+    public void refresh() {
+        this.thePublicClass = null;
     }
 }
