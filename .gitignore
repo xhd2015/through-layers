@@ -10,3 +10,4 @@ idea-sandbox
 build
 out
 .commit
+./flavors/idea-plugin/fulton-plugin-x1/lib
