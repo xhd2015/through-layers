@@ -3,18 +3,15 @@ package com.fulton_shaw.idea.plugin.x1.action.util;
 import com.fulton_shaw.common.util.data.DataUtils;
 import com.fulton_shaw.idea.plugin.x1.action.experiment.G;
 import com.pty4j.PtyProcess;
-import org.apache.commons.io.IOUtils;
 import org.junit.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.io.*;
 import java.nio.ByteBuffer;
-import java.nio.channels.Channel;
 import java.nio.channels.Channels;
 import java.nio.channels.ReadableByteChannel;
 import java.nio.charset.StandardCharsets;
-import java.util.HashMap;
 import java.util.Map;
 
 /**

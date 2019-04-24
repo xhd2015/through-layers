@@ -13,7 +13,6 @@ import javax.swing.*;
 import java.awt.*;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
-import java.util.HashMap;
 import java.util.Map;
 
 /**
@@ -49,6 +48,7 @@ public class TerminalTestAction extends AnAction {
 
             // when running cygwin bash, do not use WinPtyPorcess,that is, set isCygwin=true,else control characters will confuse it
             // and note that "--login", "-i", the order is important, you can try that in a cmd, it will report long option error
+            // but on windows 7, set isCygwin=false will cause error, this option is better to be controlled by the user
             String[] cmd = {
                     "D:\\installed\\cygwin\\bin\\bash.exe",
                     "--login","-i",

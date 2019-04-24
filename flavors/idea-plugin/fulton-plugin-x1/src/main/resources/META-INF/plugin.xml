@@ -1,19 +1,22 @@
 <idea-plugin>
     <id>com.fulton_shaw.fulton-plugin-x1</id>
-    <name>Plugin display name here</name>
-    <vendor email="support@yourcompany.com" url="http://www.yourcompany.com">YourCompany</vendor>
+    <name>Fulton Development Tools, the IDEA Plugin Part</name>
+    <vendor email="xhd2015@gmail.com" url="http://github.com/xhd2015">xhd2015.dev</vendor>
 
     <description><![CDATA[
-    Enter short description for your plugin here.<br>
-    <em>most HTML tags may be used</em>
+      A plugin that enhanced the internal <em>terminal</em> and provide other functionality.
     ]]></description>
 
+    <change-notes>
 
-    <project-components>
-        <component>
-            <implementation-class>com.fulton_shaw.idea.plugin.x1.action.experiment.DeployConsole</implementation-class>
-        </component>
-    </project-components>
+    </change-notes>
+
+
+    <!--<project-components>-->
+        <!--<component>-->
+            <!--<implementation-class>com.fulton_shaw.idea.plugin.x1.action.experiment.DeployConsole</implementation-class>-->
+        <!--</component>-->
+    <!--</project-components>-->
 
 
     <!-- please see http://www.jetbrains.org/intellij/sdk/docs/basics/getting_started/plugin_compatibility.html
@@ -27,6 +30,11 @@
 
         <annotator language="JAVA" implementationClass="com.fulton_shaw.idea.plugin.x1.action.mapper.MapperMethodNameDuplicateAnnotator" id="MapperMethodNameDuplicateAnnotator"/>
         <gotoDeclarationHandler implementation="com.fulton_shaw.idea.plugin.x1.action.mapper.MapperXmlGotoDeclarationHandler" id="MapperXmlGotoDeclarationHandler"/>
+
+        <projectConfigurable groupId="tools" groupWeight="130" displayName="X Terminal" id="xterminal" instance="com.fulton_shaw.idea.plugin.x1.action.terminal.group.FultonTerminalOptionsConfigurable"/>
+        <projectService serviceImplementation="com.fulton_shaw.idea.plugin.x1.action.terminal.group.FultonTerminalOptionsProvider"/>
+        <!--condition is used to determine  whether the project should be shown-->
+        <toolWindow id="XTerminal" canCloseContents="true" factoryClass="com.fulton_shaw.idea.plugin.x1.action.terminal.group.XTerminalToolWindowFactory"  anchor="bottom"/>
     </extensions>
 
     <actions>
@@ -74,6 +82,9 @@
             <add-to-group group-id="EditorPopupMenu" anchor="last"/>
         </action>
 
-
+        <group class="com.fulton_shaw.idea.plugin.x1.action.terminal.group.XTerminalActionGroup" text="X Terminals" id="XTerminalActionGroup" popup="true">
+            <add-to-group group-id="EditorPopupMenu" relative-to-action="EditorPopupMenu1" anchor="before"/>
+            <add-to-group group-id="ProjectViewPopupMenu" relative-to-action="CutCopyPasteGroup" anchor="after"/>
+        </group>
     </actions>
 </idea-plugin>

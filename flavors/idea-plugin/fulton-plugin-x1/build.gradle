@@ -9,7 +9,7 @@ version '1.0-SNAPSHOT'
 sourceCompatibility = 1.8
 
 // for mavenLocal
-System.properties.setProperty("maven.repo.local", "D:/Pool/maven-repo")
+//System.properties.setProperty("maven.repo.local", "D:/Pool/maven-repo")
 
 
 
@@ -28,9 +28,9 @@ repositories {
         url "https://jetbrains.bintray.com/pty4j"
     }
 
-    flatDir {
-        dirs "./lib"
-    }
+//    flatDir {
+//        dirs "./lib"
+//    }
 
 
     if (System.properties.containsKey(mvnLocalProperty)) {
@@ -46,7 +46,9 @@ dependencies {
     compile group: 'org.apache.logging.log4j', name: 'log4j-slf4j-impl', version: '2.11.2'
     // https://mvnrepository.com/artifact/org.slf4j/slf4j-api
     compile group: 'org.slf4j', name: 'slf4j-api', version: '1.7.26'
-    compile group: 'com.fulton_shaw', name: 'fulton-commons', version: '1.0.2-SNAPSHOT'
+    compile(group: 'com.fulton_shaw', name: 'fulton-commons', version: '1.0.2-SNAPSHOT') {
+        exclude group:"com.google.guava", module: "guava"
+    }
 //    compile group:'org.jetbrains.pty4j', name:'pty4j',version:'0.8.6'
     // https://mvnrepository.com/artifact/com.jcraft/jsch
 //    compile group: 'com.jcraft', name: 'jsch', version: '0.1.55'
@@ -54,13 +56,21 @@ dependencies {
 //    compile group: 'org.jetbrains.jediterm', name: 'jediterm-pty', version: '2.14'
 }
 
+
+// publish the plugin
 intellij {
     version '2018.2.2'
+    // target Intellij IDEA ultimate edition
+    type 'IU'
+    updateSinceUntilBuild true
+    // should download sources while building?
+    downloadSources true
 }
 patchPluginXml {
     changeNotes """
-      Add change notes here.<br>
-      <em>most HTML tags may be used</em>"""
+    
+    2019-4-24 : released the version 1.0, added XTerminal and other minor features
+"""
 }
 
 task debug {
