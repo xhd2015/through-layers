@@ -1,0 +1,2 @@
+# git repository
+In non-bare repositoies,if push happens to current working branch, set `receive.denyCurrentBranch = ignore` will accept any valid push, but in some git versions(server side), after push, a `git reset --hard` is needed.

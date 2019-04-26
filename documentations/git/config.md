@@ -22,6 +22,8 @@ core.autocrlf | on windows,set it to `true`(default for windows) will automatica
 core.whitespace| three are turned on:`blank-at-eol`,`blank-at-eof`,`space-before-tab`, three are turned off:`indent-with-non-tab`,`tab-in-indent`,`cr-at-eof`, these configs can be used when using `diff`, and `apply`:` git apply --whitespace=fix|warn <patch>`|appending: `-space-before-tab,indent-with-non-tab,tab-in-indent,cr-at-eol`, reset:`trailing-space,-space-before-tab,indent-with-non-tab,tab-in-indent,cr-at-eol`
 **Server**|-|-
 receive.denyDeletes| whether accept deleting|`true`
+receive.denyCurrentBranch|when the remote git directory is not a bare repository, and it is now on the branch being pushed, then this value decides whether to deny or ignore the push,possible values:`ignore`(simple accept),`warn`,`refuse`|`ignore`
+
 
 # CLI
 ```bash

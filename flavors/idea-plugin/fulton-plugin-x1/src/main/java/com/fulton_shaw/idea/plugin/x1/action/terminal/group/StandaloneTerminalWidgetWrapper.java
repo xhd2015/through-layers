@@ -14,6 +14,7 @@ import com.intellij.util.EnvironmentUtil;
 import com.jediterm.pty.PtyProcessTtyConnector;
 import com.jediterm.terminal.TtyConnector;
 import com.jediterm.terminal.TtyConnectorWaitFor;
+import com.jediterm.terminal.ui.TerminalAction;
 import com.pty4j.PtyProcess;
 import org.apache.commons.lang3.StringUtils;
 import org.jetbrains.annotations.Nullable;
@@ -28,6 +29,7 @@ import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.LinkedList;
+import java.util.List;
 import java.util.Map;
 import java.util.concurrent.Executors;
 
@@ -37,6 +39,7 @@ import java.util.concurrent.Executors;
  */
 public class StandaloneTerminalWidgetWrapper {
     public static final String[] SPECIAL_KEYS = new String[]{"SELECTED", "PROJECT_ROOT", "WORKSPACE_ROOT"};
+    public static final int ESC_CODE = 0x1B;
     private FultonTerminalOptionsProvider.SingleTabState state;
     private JBTerminalWidget widget;
     private TtyConnectorWaitFor waitFor;
@@ -86,7 +89,16 @@ public class StandaloneTerminalWidgetWrapper {
             }};
 
             // add to widget
-            widget = new JBTerminalWidget(project, settingsProvider, project);
+            widget = new JBTerminalWidget(project, settingsProvider, project) {
+                // remove the JetBrain added 'ESC', to make it work with vim in bash
+                @Override
+                public List<TerminalAction> getActions() {
+                    //  dynamically remove the ESC intercept
+                    return removeEscIntercept(super.getActions());
+                }
+            };
+
+
             widget.createTerminalSession(ttyConnector);
             widget.getTerminalPanel().init();
             widget.getTerminalPanel().initKeyHandler();
@@ -125,8 +137,18 @@ public class StandaloneTerminalWidgetWrapper {
             // no matter what the previous script is, send a new line to end these all
             widget.getTerminalStarter().sendString(" \n");
         } catch (IOException e1) {
-            throw new RuntimeException("error creating PTY, check if your shell path and other configurations are correct.",e1);
+            throw new RuntimeException("error creating PTY, check if your shell path and other configurations are correct.", e1);
         }
+    }
+
+    private List<TerminalAction> removeEscIntercept(List<TerminalAction> actions) {
+        for (TerminalAction action : actions) {
+            if (action.getKeyCode() == ESC_CODE) {
+                actions.remove(action);
+                break;
+            }
+        }
+        return actions;
     }
 
     public void showInFrame() {
