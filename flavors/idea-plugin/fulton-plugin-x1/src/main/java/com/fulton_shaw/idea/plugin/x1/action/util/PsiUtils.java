@@ -1,6 +1,6 @@
 package com.fulton_shaw.idea.plugin.x1.action.util;
 
-import com.intellij.lang.jvm.JvmClassKind;
+//import com.intellij.lang.jvm.JvmClassKind;
 import com.intellij.pom.Navigatable;
 import com.intellij.psi.*;
 import org.jetbrains.annotations.NotNull;
@@ -27,7 +27,8 @@ public class PsiUtils {
 
     // non abstract, just class
     public static boolean isConcreteClass(PsiClass psiClass) {
-        return psiClass.getClassKind() == JvmClassKind.CLASS && !isAbstract(psiClass);
+        return  !psiClass.isInterface() && !psiClass.isEnum() && !psiClass.isAnnotationType() && !isAbstract(psiClass);
+//        return psiClass.getClassKind() == JvmClassKind.CLASS && !isAbstract(psiClass);
     }
 
     public static boolean hasModifier(PsiClass psiClass, String name) {

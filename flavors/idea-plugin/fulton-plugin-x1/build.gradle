@@ -26,7 +26,7 @@ repositories {
         }
     }
     maven {
-        url "https://jetbrains.bintray.com/pty4j"
+        url "https://jetbrains.bintray.com"
     }
 
 //    flatDir {
@@ -62,7 +62,8 @@ dependencies {
 
 // publish the plugin
 intellij {
-    version '2018.2.2'
+     // xiaobing
+    version '2017.2'
     // target Intellij IDEA ultimate edition
     type 'IU'
     updateSinceUntilBuild true

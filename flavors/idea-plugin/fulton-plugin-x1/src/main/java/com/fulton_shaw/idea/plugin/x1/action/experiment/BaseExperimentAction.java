@@ -14,7 +14,8 @@ public class BaseExperimentAction extends AnAction {
     @Override
     public void actionPerformed(AnActionEvent e) {
         DeployConsole deployConsole = e.getProject().getComponent(DeployConsole.class);
-        deployConsole.getConsole().print("hello world", ConsoleViewContentType.LOG_INFO_OUTPUT);
+        deployConsole.getConsole().print("hello world",ConsoleViewContentType.NORMAL_OUTPUT);
+//                ConsoleViewContentType.LOG_INFO_OUTPUT);
     }
 
     @Override
