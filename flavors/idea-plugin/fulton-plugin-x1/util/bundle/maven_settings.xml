@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<settings xmlns="http://maven.apache.org/SETTINGS/1.0.0"
+          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+          xsi:schemaLocation="http://maven.apache.org/SETTINGS/1.0.0 http://maven.apache.org/xsd/settings-1.0.0.xsd">
+<localRepository>UNIQUE_MAVEN_REPO</localRepository>
+<pluginGroups>
+  </pluginGroups>
+ 
+  <proxies>
+  </proxies>
+ 
+  <servers>
+      <server>  
+        <id>nexus-releases</id>  
+        <username>admin</username>  
+        <password>admin123456</password>  
+      </server>  
+      <server>  
+        <id>nexus-snapshots</id>  
+        <username>admin</username>  
+        <password>admin123456</password>  
+      </server>   
+  </servers>
+ 
+   
+  <mirrors>
+    
+    <mirror>
+        <id>nexus</id>
+        <name>Nexus</name>
+        <url>http://nexus.vivo.xyz/nexus/content/groups/public/</url>
+        <mirrorOf>*</mirrorOf>
+    </mirror> 
+  </mirrors>
+   
+   
+  <profiles>
+    <profile>
+        <id>nexus</id>
+        <repositories>
+            <repository>
+                <id>nexus</id>
+                <name>Nexus</name>
+                <url>http://nexus.vivo.xyz/nexus/content/groups/public/</url>
+                <releases><enabled>true</enabled></releases>
+                <snapshots>
+                    <enabled>true</enabled>  
+                    <updatePolicy>always</updatePolicy>  
+                    <checksumPolicy>warn</checksumPolicy>  
+                </snapshots>
+            </repository>
+        </repositories>
+         
+        <pluginRepositories>
+            <pluginRepository>
+                <id>nexus</id>
+                <name>Nexus</name>
+                <url>http://nexus.vivo.xyz/nexus/content/groups/public/</url>
+                <releases><enabled>true</enabled></releases>
+                <snapshots>
+                    <enabled>true</enabled>  
+                    <updatePolicy>always</updatePolicy>  
+                    <checksumPolicy>warn</checksumPolicy>  
+                </snapshots>
+            </pluginRepository>
+             
+        </pluginRepositories>
+    </profile>
+  </profiles>
+  <activeProfiles>
+    <activeProfile>nexus</activeProfile>
+  </activeProfiles>
+   
+</settings>
