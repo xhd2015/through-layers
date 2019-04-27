@@ -5,9 +5,11 @@ import com.google.common.base.Predicate;
 import com.intellij.icons.AllIcons;
 import com.intellij.openapi.actionSystem.*;
 import com.intellij.openapi.project.DumbAwareAction;
+import com.intellij.openapi.project.Project;
 import com.intellij.openapi.ui.SimpleToolWindowPanel;
 import com.intellij.openapi.ui.popup.JBPopupFactory;
 import com.intellij.openapi.ui.popup.ListPopup;
+import com.intellij.openapi.wm.ToolWindow;
 import com.intellij.ui.components.JBTabbedPane;
 import com.intellij.ui.content.Content;
 import com.intellij.ui.content.ContentFactory;
@@ -15,6 +17,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import javax.swing.*;
+import java.awt.*;
 import java.util.ArrayList;
 
 /**
@@ -24,9 +27,42 @@ import java.util.ArrayList;
 public class XTerminalToolWindow {
     private static final Logger LOG = LoggerFactory.getLogger(XTerminalToolWindow.class);
 
-    private SimpleToolWindowPanel toolWindowPanel;
+    private ToolWindowProxy toolWindowPanel;
     private JBTabbedPane tabbedPane;
     private java.util.List<StandaloneTerminalWidgetWrapper> wrappers;
+    private java.util.List<IntPack> liveIndex;
+
+    public static XTerminalToolWindow getInstance(ToolWindow toolWindow) {
+        if (toolWindow == null) {
+            return null;
+        }
+        Content content = toolWindow.getContentManager().getContent(0);
+        if (content != null) {
+            JComponent com = content.getComponent();
+            if (com instanceof ToolWindowProxy) {
+                return ((ToolWindowProxy) com).getXTerminalToolWindow();
+            }
+        }
+        return null;
+    }
+
+    private static class ToolWindowProxy extends SimpleToolWindowPanel {
+        private XTerminalToolWindow xTerminalToolWindow;
+
+        public XTerminalToolWindow getXTerminalToolWindow() {
+            return xTerminalToolWindow;
+        }
+
+        public ToolWindowProxy(boolean vertical, XTerminalToolWindow xTerminalToolWindow) {
+            super(vertical);
+            this.xTerminalToolWindow = xTerminalToolWindow;
+        }
+
+        public ToolWindowProxy(boolean vertical, boolean borderless, XTerminalToolWindow xTerminalToolWindow) {
+            super(vertical, borderless);
+            this.xTerminalToolWindow = xTerminalToolWindow;
+        }
+    }
 
     public JComponent getRootComponent() {
         return toolWindowPanel;
@@ -35,7 +71,7 @@ public class XTerminalToolWindow {
     public XTerminalToolWindow() {
         tabbedPane = new JBTabbedPane();
         wrappers = new ArrayList<>();
-
+        liveIndex = new ArrayList<>();
 
         DefaultActionGroup group = new DefaultActionGroup();
         AnAction newSession = new DumbAwareAction("New Session", "Create New Terminal Session", AllIcons.General.Add) {
@@ -61,7 +97,7 @@ public class XTerminalToolWindow {
         group.add(removeSession);
         group.add(moveSessionOutside);
 
-        this.toolWindowPanel = new SimpleToolWindowPanel(false, true);
+        this.toolWindowPanel = new ToolWindowProxy(false, true, this);
         ActionToolbar toolbar = ActionManager.getInstance().createActionToolbar("XTerminal", group, false);
         final Content content = ContentFactory.SERVICE.getInstance().createContent(this.toolWindowPanel, "", false);
 
@@ -83,15 +119,7 @@ public class XTerminalToolWindow {
                     public void actionPerformed(AnActionEvent e) {
                         FultonTerminalOptionsProvider.SingleTabState state = singleTabState;
                         StandaloneTerminalWidgetWrapper widgetWrapper = new StandaloneTerminalWidgetWrapper(e.getProject(), e.getData(CommonDataKeys.VIRTUAL_FILE), state);
-                        IntPack index = new IntPack();
-                        widgetWrapper.addTerminationCallback(new Runnable() {
-                            @Override
-                            public void run() {
-                                removeTab(index.get());
-                            }
-                        });
-                        addTab(widgetWrapper);
-                        index.set(wrappers.size() - 1);
+                        addExternalTerminal(widgetWrapper);
                     }
                 };
                 return xTerminalInvokeInline;
@@ -110,23 +138,79 @@ public class XTerminalToolWindow {
         if (idx >= 0) {
             tabbedPane.removeTabAt(idx);
             wrappers.remove(idx);
+            decrementLiveIndexUpFrom(idx);
         }
     }
 
+    /**
+     * append, no need to maintain the index
+     *
+     * @param wrapper
+     */
+    public void addExternalTerminal(StandaloneTerminalWidgetWrapper wrapper) {
+        IntPack index = new IntPack();
+        liveIndex.add(index);
+        wrapper.changeContainer(tabbedPane, new StandaloneTerminalWidgetWrapper.MyLifecycle() {
+            @Override
+            public void onRemoveFromContainer(Component currentContainer) {
+                if (currentContainer == tabbedPane) {
+                    removeTab(index.get());
+                }
+                liveIndex.remove(index);
+            }
+
+            @Override
+            public void onTerminalExit(Component currentContainer) {
+                if (currentContainer == tabbedPane) {
+                    removeTab(index.get());
+                }
+                liveIndex.remove(index);
+            }
+        });
+        addTab(wrapper);
+        index.set(wrappers.size() - 1);
+    }
+
+    /**
+     * before this, component must be removed from the original container
+     *
+     * @param wrapper
+     */
     private void addTab(StandaloneTerminalWidgetWrapper wrapper) {
         tabbedPane.addTab(wrapper.getState().getTitle(), wrapper.getWidget());
         wrappers.add(wrapper);
         tabbedPane.setSelectedComponent(wrapper.getWidget());
     }
 
+    // move to outside
     private void moveSession(AnActionEvent e) {
         int idx = tabbedPane.getSelectedIndex();
         if (idx == -1) {
             return;
         }
         StandaloneTerminalWidgetWrapper wrapper = wrappers.get(idx);
-        removeTab(idx);
         wrapper.showInFrame();
     }
 
+    /**
+     * if i is deleted, all indexes that are greater that i must be decremented
+     * if i is inserted, all indexes that are greater or equals to i must be incremented
+     *
+     * @param i
+     */
+    private void decrementLiveIndexUpFrom(int i) {
+        for (IntPack index : liveIndex) {
+            if (index.get() > i) {
+                index.set(index.get() - 1);
+            }
+        }
+    }
+
+    private void incrementLiveIndexUpFrom(int i) {
+        for (IntPack index : liveIndex) {
+            if (index.get() >= i) {
+                index.set(index.get() + 1);
+            }
+        }
+    }
 }

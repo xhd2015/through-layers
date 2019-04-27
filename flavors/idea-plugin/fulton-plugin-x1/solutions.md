@@ -36,3 +36,6 @@ the key process is as follows:
             is ISO control ?  true --> return
                               false --> send the key
 ```
+
+# Problem #2 move the terminal in and out repeatly will reduce the terminal display frame size
+Issue#3

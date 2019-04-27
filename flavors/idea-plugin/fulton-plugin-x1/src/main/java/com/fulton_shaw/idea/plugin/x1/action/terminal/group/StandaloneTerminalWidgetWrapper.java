@@ -1,6 +1,7 @@
 package com.fulton_shaw.idea.plugin.x1.action.terminal.group;
 
 import com.fulton_shaw.common.lang.exception.GroupException;
+import com.fulton_shaw.common.lang.value.Pack;
 import com.google.common.base.Predicate;
 import com.intellij.openapi.actionSystem.AnActionEvent;
 import com.intellij.openapi.actionSystem.CommonDataKeys;
@@ -8,6 +9,8 @@ import com.intellij.openapi.editor.colors.EditorColorsManager;
 import com.intellij.openapi.editor.colors.EditorColorsScheme;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.vfs.VirtualFile;
+import com.intellij.openapi.wm.ToolWindow;
+import com.intellij.openapi.wm.ToolWindowManager;
 import com.intellij.terminal.JBTerminalSystemSettingsProviderBase;
 import com.intellij.terminal.JBTerminalWidget;
 import com.intellij.util.EnvironmentUtil;
@@ -21,6 +24,7 @@ import org.jetbrains.annotations.Nullable;
 
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.KeyEvent;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.io.File;
@@ -41,12 +45,26 @@ public class StandaloneTerminalWidgetWrapper {
     public static final String[] SPECIAL_KEYS = new String[]{"SELECTED", "PROJECT_ROOT", "WORKSPACE_ROOT"};
     public static final int ESC_CODE = 0x1B;
     private FultonTerminalOptionsProvider.SingleTabState state;
+    private Project project;
     private JBTerminalWidget widget;
     private TtyConnectorWaitFor waitFor;
     private LinkedList<Runnable> exitCallback;
+    // the container is a logical container,not necessary be the direct holder
+    private Component containingComponent;
+    private MyLifecycle myLifecycle;
 
+    public interface MyLifecycle {
+        void onRemoveFromContainer(Component currentContainer);
+
+        void onTerminalExit(Component currentContainer);
+
+        default void onProcessActions(List<TerminalAction> actions) {
+        }
+
+    }
 
     public StandaloneTerminalWidgetWrapper(Project project, VirtualFile virtualFile, FultonTerminalOptionsProvider.SingleTabState state) {
+        this.project = project;
         exitCallback = new LinkedList<>();
         this.state = state;
         if (state.getShellPath() == null) {
@@ -54,9 +72,10 @@ public class StandaloneTerminalWidgetWrapper {
         }
         try {
             Map<String, String> env = new HashMap<>(EnvironmentUtil.getEnvironmentMap());
-            for (String specialKey : SPECIAL_KEYS) {
-                env.put(specialKey, parseDirectory(project, virtualFile, "${" + specialKey + "}"));
-            }
+            env.putAll(getContextEnv(project, virtualFile));
+//            for (String specialKey : SPECIAL_KEYS) {
+//                env.put(specialKey, parseDirectory(project, virtualFile, "${" + specialKey + "}"));
+//            }
             java.util.List<String> commands = new ArrayList<>();
             commands.add(state.getShellPath());
             String options = state.getShellOptions();
@@ -72,7 +91,11 @@ public class StandaloneTerminalWidgetWrapper {
 
             boolean isCygwin = state.isCygwin();
             boolean isConsole = false;
-            String dir = parseDirectory(project, virtualFile, state.getStartDirectory());
+//            String dir = parseDirectory(project, virtualFile, state.getStartDirectory());
+            String dir = state.getStartDirectory();
+            if (dir != null && dir.startsWith("${") && dir.endsWith("}")) {
+                dir = env.get(dir.substring(2, dir.length() - 1));
+            }
             PtyProcess ptyProcess = PtyProcess.exec(cmd, env, dir, isConsole, isCygwin, null);
             TtyConnector ttyConnector = new PtyProcessTtyConnector(ptyProcess, StandardCharsets.UTF_8);
 
@@ -94,7 +117,11 @@ public class StandaloneTerminalWidgetWrapper {
                 @Override
                 public List<TerminalAction> getActions() {
                     //  dynamically remove the ESC intercept
-                    return removeEscIntercept(super.getActions());
+                    List<TerminalAction> actions = removeEscIntercept(super.getActions());
+                    if (myLifecycle != null) {
+                        myLifecycle.onProcessActions(actions);
+                    }
+                    return actions;
                 }
             };
 
@@ -114,7 +141,11 @@ public class StandaloneTerminalWidgetWrapper {
             waitFor = new TtyConnectorWaitFor(ttyConnector, Executors.newSingleThreadExecutor());
             waitFor.setTerminationCallback(new Predicate<Integer>() {
                 public boolean apply(Integer exitCode) {
-                    widget.dispose();
+                    if (containingComponent == null) {
+                        widget.dispose();
+                    } else {
+                        myLifecycle.onTerminalExit(containingComponent);
+                    }
                     GroupException groupException = new GroupException();
                     if (exitCallback != null) {
                         for (Runnable runnable : exitCallback) {
@@ -141,6 +172,10 @@ public class StandaloneTerminalWidgetWrapper {
         }
     }
 
+    public Project getProject() {
+        return project;
+    }
+
     private List<TerminalAction> removeEscIntercept(List<TerminalAction> actions) {
         for (TerminalAction action : actions) {
             if (action.getKeyCode() == ESC_CODE) {
@@ -151,7 +186,17 @@ public class StandaloneTerminalWidgetWrapper {
         return actions;
     }
 
+    public void changeContainer(Component component, MyLifecycle lifecycle) {
+        if (this.containingComponent != null && this.myLifecycle != null) {
+            this.myLifecycle.onRemoveFromContainer(this.containingComponent);
+        }
+        this.containingComponent = component;
+        this.myLifecycle = lifecycle;
+    }
+
     public void showInFrame() {
+        // remove the original component firstly
+        changeContainer(null, null);
         // add to frame
         JFrame frame = new JFrame(state.getTitle());
         frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
@@ -180,20 +225,42 @@ public class StandaloneTerminalWidgetWrapper {
                 super.windowClosing(e);
             }
         });
-
-        waitFor.setTerminationCallback(new Predicate<Integer>() {
-            @Override
-            public boolean apply(Integer integer) {
-                frame.dispose();
-                return true;
-            }
-        });
-
         // dispose the frame on exit
-        addTerminationCallback(new Runnable() {
+        changeContainer(frame, new MyLifecycle() {
             @Override
-            public void run() {
-                frame.dispose();
+            public void onRemoveFromContainer(Component component) {
+                if (component == frame) {
+                    frame.getContentPane().remove(StandaloneTerminalWidgetWrapper.this.getWidget());
+                    frame.dispose();
+                }
+            }
+
+            @Override
+            public void onTerminalExit(Component currentContainer) {
+                if (currentContainer == frame) {
+                    frame.dispose();
+                }
+            }
+
+            @Override
+            public void onProcessActions(List<TerminalAction> actions) {
+                actions.add(new TerminalAction("Show in Tab", new KeyStroke[0], new Predicate<KeyEvent>() {
+                    @Override
+                    public boolean apply(KeyEvent keyEvent) {
+                        ToolWindowManager toolWindowManager = ToolWindowManager.getInstance(project);
+                        ToolWindow terminal = toolWindowManager.getToolWindow("XTerminal");
+                        XTerminalToolWindow xTerminal = XTerminalToolWindow.getInstance(terminal);
+                        if (xTerminal != null) {
+                            terminal.activate(new Runnable() {
+                                @Override
+                                public void run() {
+                                    xTerminal.addExternalTerminal(StandaloneTerminalWidgetWrapper.this);
+                                }
+                            });
+                        }
+                        return true;
+                    }
+                }));
             }
         });
     }
@@ -211,6 +278,15 @@ public class StandaloneTerminalWidgetWrapper {
 
     public FultonTerminalOptionsProvider.SingleTabState getState() {
         return state;
+    }
+
+
+    private static Map<String, String> getContextEnv(Project project, VirtualFile virtualFile) {
+        Map<String, String> map = new HashMap<>();
+        map.put("PROJECT_META_ROOT", project != null ? project.getProjectFile().getParent().getCanonicalPath() : "");
+        map.put("PROJECT_ROOT", project != null ? project.getBasePath() : "");
+        map.put("SELECTED", virtualFile != null ? virtualFile.getCanonicalPath() : "");
+        return map;
     }
 
     private static String parseDirectory(Project project, VirtualFile virtualFile, String path) {

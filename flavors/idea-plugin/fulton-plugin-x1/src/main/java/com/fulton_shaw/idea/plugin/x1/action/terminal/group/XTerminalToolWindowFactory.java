@@ -15,7 +15,7 @@ import org.jetbrains.annotations.NotNull;
  * @author xiaohuadong  (put comment here)
  * @date 2019/04/24
  */
-public class XTerminalToolWindowFactory implements ToolWindowFactory , DumbAware {
+public class XTerminalToolWindowFactory implements ToolWindowFactory, DumbAware {
     @Override
     public void createToolWindowContent(@NotNull Project project, @NotNull ToolWindow toolWindow) {
         ToolWindowManager toolWindowManager = ToolWindowManager.getInstance(project);
