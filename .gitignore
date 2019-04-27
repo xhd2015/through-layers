@@ -10,6 +10,6 @@ idea-sandbox
 build
 out
 .commit
-./flavors/idea-plugin/fulton-plugin-x1/lib
-./flavors/idea-plugin/fulton-plugin-x1/util/bundle/*.gz
-./flavors/idea-plugin/fulton-plugin-x1/util/deploy.tar.gz
+flavors/idea-plugin/fulton-plugin-x1/lib
+flavors/idea-plugin/fulton-plugin-x1/util/bundle/*.gz
+flavors/idea-plugin/fulton-plugin-x1/util/deploy.tar.gz
